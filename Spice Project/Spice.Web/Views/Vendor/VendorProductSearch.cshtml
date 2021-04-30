@@ -1,0 +1,109 @@
+﻿@model Spice.DataContarct.ViewModel.Vendor_ViewModel
+@{
+    ViewBag.Title = "VendorProductSearch";
+    Layout = "~/Views/Shared/_LayoutBackEnd.cshtml";
+}
+
+
+
+    <div class="main-content">
+        <div class="page-header">
+            <h2 class="header-title">Vendor Product List</h2>
+            <div class="header-sub-title">
+                <nav class="breadcrumb breadcrumb-dash">
+                    <a href="#" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Admin</a>
+                    <a class="breadcrumb-item" href="#">Vendor Product</a>                 
+                    <span class="breadcrumb-item active">Search</span>
+                </nav>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="row m-b-30">
+                    <div class="col-lg-8">
+                        <div class="d-md-flex">
+                            <div class="m-b-10 m-r-15">
+                                <select class="custom-select" id="drpVendor" style="min-width: 180px;">
+                                    <option selected>Select Vendor...</option>
+                                    @if (Model.lst_vendor != null)
+                                    {
+                                        foreach (var item in Model.lst_vendor)
+                                        {
+                                            <option value="@item.Id">@item.FirstName @item.LastName</option>
+
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="m-b-10 m-r-15">
+                                <select class="custom-select" id="drpProduct" style="min-width: 180px;">
+                                    <option selected>Select Product...</option>
+                                    @if (Model.lst_product != null)
+                                    {
+                                        foreach (var item in Model.lst_product)
+                                        {
+                                            <option value="@item.ProductId">@item.ProductName</option>
+
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>                      
+                    </div>
+                    <div class="col-lg-4 text-right">
+                        <a class="btn btn-primary" href="@Url.Action("VendorProduct", "Vendor")">
+                            <i class="anticon anticon-plus-circle m-r-5"></i>
+                            <span>Add Vendor Product</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover e-commerce-table">
+                        <thead>
+                            <tr>                               
+                                <th>ID</th>
+                                <th>Vendor Name</th>
+                                <th>Product Name</th>
+                                <th>Vendor Price</th>
+                                <th>Priority</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.lst_vendorProduct != null)
+                            {
+                                var count = 1;
+                                foreach (var item in Model.lst_vendorProduct)
+                                {
+                                    <tr>                                       
+                                        <td>
+                                            @count
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <h6 class="m-b-0 m-l-10">@item.VendorName</h6>
+                                            </div>
+                                        </td>
+                                        <td>@item.ProductName</td>
+                                        <td>@item.VendorPrice</td>
+                                        <td>@item.VendorPriority</td>
+                                        <td>
+                                            <a class="btn btn-icon btn-hover btn-sm btn-rounded pull-right" href="@Url.Action("GetVendorProductById", "Vendor")?VendorProductId=@item.VendorProductId">
+                                                <i class="anticon anticon-edit"></i>
+                                            </a>
+                                            <a class="btn btn-icon btn-hover btn-sm btn-rounded" href="@Url.Action("DeleteVendorProduct", "Vendor")?VendorProductId=@item.VendorProductId">
+                                                <i class="anticon anticon-delete"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    count++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+

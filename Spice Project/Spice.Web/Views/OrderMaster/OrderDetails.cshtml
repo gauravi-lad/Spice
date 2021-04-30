@@ -1,0 +1,293 @@
+﻿@model Spice.DataContarct.ViewModel.OrderMaster_ViewModel
+@{
+    ViewBag.Title = "OrderDetails";
+    Layout = "~/Views/Shared/_LayoutBackEnd.cshtml";
+
+    int item_count = 0, invoice_count = 0;
+
+
+    <!-- Content Wrapper START -->
+    <div class="main-content">
+        <div class="page-header">
+            <h2 class="header-title">Order Details</h2>
+            <div class="header-sub-title">
+                <nav class="breadcrumb breadcrumb-dash">
+                    <a href="#" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+                    <a class="breadcrumb-item" href="#">Order</a>
+                    <span class="breadcrumb-item active">Order Details</span>
+                </nav>
+            </div>
+        </div>
+        <div class="card">
+            <div class="col-lg-12 text-right">
+                <a href="/OrderMaster/Get_Listing" class="btn btn-sm btn-primary">Back</a>
+            </div>
+            <div id="dvMsg">
+                <div class="alert alert-success dvSuccess" style="display:none;">
+                    <div class="d-flex align-items-center justify-content-start">
+                        <span class="alert-icon">
+                            <i class="anticon anticon-check-o"></i>
+                        </span>
+                        <span class="successAlrt"></span>
+                    </div>
+                </div>
+                <div class="alert alert-danger dvError" style="display:none;">
+                    <div class="d-flex justify-content-start">
+                        <span class="alert-icon m-r-20 font-size-30">
+                            <i class="anticon anticon-close-circle"></i>
+                        </span>
+                        <div>
+                            <h5 class="alert-heading">Error</h5>
+                            <p class="errorAlrt"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div style="">
+                    <input type="hidden" id="hdnResult" value="@ViewBag.Result" />
+                    <form id="frmUpdateOrderStatus" action="/OrderMaster/Update_Order_status" method="post">
+                        <input type="hidden" name="orderMaster.Id" value="@Model.orderMaster.Id" />
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Order Invoice No.</label>
+                                    <p>@Model.orderMaster.Order_Invoice_Number</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Order Date</label>
+                                    <p>@Model.orderMaster.Order_Date.ToString("dd-MMM-yyyy h:mm tt")</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Order Status</label>
+                                    <select id="drp_OrderStatus" class="form-control form-control-sm" name="orderMaster.Orde_Status">
+                                        <option value="" selected>Choose...</option>
+                                        @foreach (var item in Model.drp_OrderStatus)
+                                        {
+                                            if (Model.orderMaster.Orde_Status == item.Key)
+                                            {
+                                                <option selected value="@item.Key">@item.Value.Replace('_', ' ') </option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Key">@item.Value.Replace('_', ' ') </option>
+                                            }
+
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>Customer Name:</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <label>@Model.orderMaster.Customer_Name</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>Address:</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <label>
+                                        @Html.Raw(Model.customer_Address.ShippingAddress)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>Payment Method:</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Cash on Delivery</label>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>Payment Status:</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>@(Model.drp_PaymentStatus.FirstOrDefault(t => t.Key == Model.orderMaster.Payment_Status).Value)</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+                    <form id="frmUpdateVendor" action="/OrderMaster/Assign_Vendors" method="post">
+                        <div class="row">
+                            <input type="hidden" name="orderMaster.Id" value="@Model.orderMaster.Id" />
+                            <div class="col-md-12">
+                                <h5 class="m-b-10 text-primary">Item Details</h5>
+                                <div class="table-responsive m-b-10">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Prod SKU</th>
+                                                <th>Product</th>
+                                                <th>Quantity</th>
+                                                <th>Unit</th>
+                                                <th>Price/unit</th>
+                                                <th>Tax Amt.</th>
+                                                <th>Total Amt.</th>
+                                                <th>Assign Vendor</th>
+                                                <th hidden></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            @foreach (var item in Model.order_Item_Details)
+                                            {
+                                                <tr>
+                                                    <td>@item.ProductSKUCode</td>
+                                                    <td>@item.ProductName</td>
+                                                    <td>@item.Quantity</td>
+                                                    <td>@item.Unit</td>
+                                                    <td>@item.UnitPrice</td>
+                                                    <td>@item.TaxAmmount</td>
+                                                    <td>@item.FinalAmmount</td>
+                                                    <td>
+                                                        <input type="hidden" name="order_Item_Details[@item_count].Id" value="@item.Id" />
+                                                        <select id="" class="form-control form-control-sm" name="order_Item_Details[@item_count].VendorId">
+                                                            <option value="" selected>Choose...</option>
+                                                            @foreach (var mapping in Model.Product_Vendor_Mapping)
+                                                            {
+                                                                if (mapping.ProductId == item.ProductId)
+                                                                {
+                                                                    if (item.VendorId == mapping.VendorId)
+                                                                    {
+                                                                    <option value="@mapping.VendorId" selected> @mapping.VendorName </option>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                    <option value="@mapping.VendorId"> @mapping.VendorName </option>
+                                                                    }
+                                                                }
+                                                            }
+
+                                                        </select>
+                                                    </td>
+                                                    <td hidden>@(item_count++)</td>
+                                                </tr>
+
+                                            }
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                @if (Model.order_Invoice_Details == null || Model.order_Invoice_Details.Count == 0)
+                                {
+                                    <div class="m-b-10 text-right">
+                                        <label># Vendor Invoice</label>
+                                        <button type="submit" class="btn btn-sm btn-primary">Generate Invoice</button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </form>
+                    <hr />
+                    <form id="frmUpdateInvoiceDate" action="/OrderMaster/Update_Vendors_Delivery_Dates" method="post">
+                        @if (Model.order_Invoice_Details != null && Model.order_Invoice_Details.Count != 0)
+                        {
+                            <div class="row" id="invoice-section">
+                                <input type="hidden" name="orderMaster.Id" value="@Model.orderMaster.Id" />
+                                <div class="col-md-12">
+                                    <h5 class="m-b-10 text-primary">Vendor Invoice</h5>
+                                    <div class="table-responsive m-b-10">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 15%;">Vendor Name</th>
+                                                    <th style="width: 18%;">Invoice No.</th>
+                                                    <th style="width: 16%;">Delivery Date</th>
+                                                    <th style="width: 16%;">Expected Delivery</th>
+                                                    <th style="width: 16%;">Actual Delivery</th>
+                                                    <th style="width: 19%;">Status</th>
+                                                    <th hidden></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var invoice in Model.order_Invoice_Details)
+                                                {
+                                                    <tr>
+                                                        <td>@invoice.Vendor_Name</td>
+                                                        <td>@invoice.Invoice_Number</td>
+                                                        <td>
+                                                            <input type="hidden" class="invoice" name="order_Invoice_Details[@invoice_count].Id" value="@invoice.Id" />
+                                                            <input type="hidden" class="invoice" name="order_Invoice_Details[@invoice_count].Invoice_Number" value="@invoice.Invoice_Number" />
+                                                            <div class="input-affix">
+                                                                <i class="prefix-icon anticon anticon-calendar"></i>
+                                                                <input type="text" class="form-control form-control-sm datepicker-input" name="order_Invoice_Details[@invoice_count].Delivery_Date" value="@(Convert.ToDateTime(@invoice.Delivery_Date)==DateTime.MinValue?"":Convert.ToDateTime(invoice.Delivery_Date).ToString("dd-MMM-yyyy"))" placeholder="Delivery Date">
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="input-affix">
+                                                                <i class="prefix-icon anticon anticon-calendar"></i>
+                                                                <input type="text" class="form-control form-control-sm datepicker-input" name="order_Invoice_Details[@invoice_count].ExpectedDelivery" value="@(Convert.ToDateTime(@invoice.ExpectedDelivery)==DateTime.MinValue?"":Convert.ToDateTime(@invoice.ExpectedDelivery).ToString("dd-MMM-yyyy"))" placeholder="Expected Delivery">
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="input-affix">
+                                                                <i class="prefix-icon anticon anticon-calendar"></i>
+                                                                <input type="text" class="form-control form-control-sm datepicker-input" name="order_Invoice_Details[@invoice_count].ActualDelivery" value="@(Convert.ToDateTime(@invoice.ActualDelivery)==DateTime.MinValue?"": Convert.ToDateTime(@invoice.ActualDelivery).ToString("dd-MMM-yyyy"))" placeholder="Actual Delivery">
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <select id="" class="form-control form-control-sm" name="order_Invoice_Details[@invoice_count].Invoice_Status">
+                                                                <option selected>Choose...</option>
+                                                                @foreach (var invStatus in Model.drp_InvoiceStatus)
+                                                                {
+                                                                    if (invStatus.Key == invoice.Invoice_Status)
+                                                                    {
+                                                                        <option selected value="@invStatus.Key">@invStatus.Value.Replace('_', ' ')</option>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <option value="@invStatus.Key">@invStatus.Value.Replace('_', ' ')</option>
+                                                                    }
+
+                                                                }
+                                                            </select>
+                                                        </td>
+                                                        <td hidden> @(invoice_count++)</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 text-center">
+                                    <button type="submit" class="btn btn-primary">Update Invoice</button>
+                                </div>
+                            </div>
+
+                        }
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <!-- Content Wrapper END -->
+}
+<script src="~/Scripts/Order/OrderDetails.js"></script>

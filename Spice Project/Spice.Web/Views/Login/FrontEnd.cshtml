@@ -1,0 +1,150 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutFrontEnd.cshtml";
+}
+
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+@*
+    <script src="~/Scripts/jquery.validate.js"></script>*@
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/Login/Login_Event.js"></script>
+<script src="~/Scripts/Login/Login_Method.js"></script>
+<script src="~/Scripts/Login/Login_Validation.js"></script>
+
+<!-- Breadcrumb Area start -->
+<section class="breadcrumb-area checkout-banner">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                @*<div class="breadcrumb-content">
+                        <h1 class="breadcrumb-hrading">Login / Register Page</h1>
+                        <ul class="breadcrumb-links">
+                            <li><a href="index.html">Home</a></li>
+                            <li>Login / Register</li>
+                        </ul>
+                    </div>*@
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Area End -->
+<!-- login area start -->
+<div class="login-register-area mb-60px mt-53px">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7 col-md-12 ml-auto mr-auto">
+                <div class="login-register-wrapper">
+
+                    <div class="login-register-tab-list nav">
+                        <a class="active" data-toggle="tab" href="#lg1">
+                            <h4>login</h4>
+                        </a>
+                        <a data-toggle="tab" href="#lg2">
+                            <h4>register</h4>
+                        </a>
+                    </div>
+                    <div id="dvMsg">
+                        <div class="alert alert-danger dvUnsuccessfull" style="display:none;">
+                            <div class="d-flex align-items-center justify-content-start">
+                                <span class="alert-icon">
+                                    <i class="anticon anticon-check-o"></i>
+                                </span>
+                                <span>Incorrect Username And Password!!!</span>
+                            </div>
+                        </div>
+                        <div class="alert alert-danger dvRegUnsuccessfull" style="display:none;">
+                            <div class="d-flex align-items-center justify-content-start">
+                                <span class="alert-icon">
+                                    <i class="anticon anticon-check-o"></i>
+                                </span>
+                                <span>Customer Regisration Failed!!!</span>
+                            </div>
+                        </div>
+                        <div class="alert alert-success dvRegsuccessfull" style="display:none;">
+                            <div class="d-flex align-items-center justify-content-start">
+                                <span class="alert-icon">
+                                    <i class="anticon anticon-check-o"></i>
+                                </span>
+                                <span>Regisration Successfully!!!</span>
+                            </div>
+                        </div>
+                        <div class="alert alert-danger dvError" style="display:none;">
+                            <div class="d-flex justify-content-start">
+                                <span class="alert-icon m-r-20 font-size-30">
+                                    <i class="anticon anticon-close-circle"></i>
+                                </span>
+                                <div>
+                                    <h5 class="alert-heading">Error</h5>
+                                    <p>Error Occur</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div id="lg1" class="tab-pane active">
+                            <div class="login-form-container">
+                                <div class="login-register-form">
+                                    <form id="frmFormEnd" method="post" enctype="multipart/form-data">
+                                        <div class="form-group">
+                                            <input id="txtusername" class="form-control required" type="text" name="fronEndLogin_DataModel.Email" placeholder="Username" />
+
+                                            <span class="error"></span>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <input id="txtpassword" class="form-control required" type="password" name="fronEndLogin_DataModel.Password" placeholder="Password" />
+                                            <span class="error"></span>
+                                        </div>
+                                        <div class="button-box">
+                                            <div class="login-toggle-btn">
+                                                @*<input type="checkbox" />*@
+                                                @* <a class="flote-none" href="javascript:void(0)">Remember me</a>*@
+                                                <a href="@Url.Action("Index","ForgotPassword")">Forgot Password?</a>
+                                            </div>
+                                            <button id="btnLogin" name="btnLogin"><span>Login</span></button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="lg2" class="tab-pane">
+                            <div class="login-form-container">
+                                <div class="login-register-form">
+                                    <form id="frmRegisteration" method="post" enctype="multipart/form-data">
+                                        <div class="form-group">
+                                            <input id="txtEmail" class="form-control required validateEmail" name="customerMaster.Email" placeholder="Email" type="email" />
+
+                                            <span class="error"></span>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <input id="txtPassword" class="form-control required" type="password" name="customerMaster.Password" placeholder="Password" />
+
+                                            <span class="error"></span>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <input id="txtMobileNumber" class="form-control required validateMobile" type="text" name="customerMaster.Mobile_Number" placeholder="MobileNumber" />
+                                            <span class="error"></span>
+
+                                        </div>
+                                        <div class="button-box">
+                                            <button id="btnRegistration" type="submit" value="Submit"><span>Register</span></button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>$(document).ready(function () {
+
+            });</script>
+<!-- login area end -->
+@*if($("#txtPassword").val() > 5){
+    alert("You have to enter at least 6 digit!");
+    }*@

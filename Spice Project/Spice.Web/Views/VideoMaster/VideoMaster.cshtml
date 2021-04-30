@@ -1,0 +1,175 @@
+﻿@model Spice.DataContarct.ViewModel.VideoMaster_ViewModel
+
+@{
+    ViewBag.Title = "VideoMaster";
+    Layout = "~/Views/Shared/_LayoutBackEnd.cshtml";
+}
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/VideoMaster/VideoMaster_Event.js"></script>
+
+<!-- Content Wrapper START -->
+<div class="main-content">
+    <div class="page-header">
+        <h2 class="header-title">Video Master</h2>
+        <div class="header-sub-title">
+            <nav class="breadcrumb breadcrumb-dash">
+                <a href="#" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Admin</a>
+                <a class="breadcrumb-item" href="#">Video</a>
+                <span class="breadcrumb-item active">Video Master</span>
+            </nav>
+        </div>
+    </div>
+    <div class="card">
+        <div class="col-lg-12 text-right">
+            <button class="btn btn-primary" id="btnAddVideo">
+                <i class="anticon anticon-plus-circle m-r-5"></i>
+                <span>Add Video</span>
+            </button>
+        </div>
+        <div id="dvMsg">
+            <div class="alert alert-success dvSuccess" style="display:none;">
+                <div class="d-flex align-items-center justify-content-start">
+                    <span class="alert-icon">
+                        <i class="anticon anticon-check-o"></i>
+                    </span>
+                    <span>Record Addedd Successfully!!!</span>
+                </div>
+            </div>
+            <div class="alert alert-success dvUpdate" style="display:none;">
+                <div class="d-flex align-items-center justify-content-start">
+                    <span class="alert-icon">
+                        <i class="anticon anticon-check-o"></i>
+                    </span>
+                    <span>Record Updated Successfully!!!</span>
+                </div>
+            </div>
+            <div class="alert alert-danger dvError" style="display:none;">
+                <div class="d-flex justify-content-start">
+                    <span class="alert-icon m-r-20 font-size-30">
+                        <i class="anticon anticon-close-circle"></i>
+                    </span>
+                    <div>
+                        <h5 class="alert-heading">Error</h5>
+                        <p>Failed to Insert</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="m-t-25" style="display:none;" id="dvInsert">
+                <form id="frmVideo" method="post" enctype="multipart/form-data">
+                    <div class="form-row">
+                        <input type="hidden" id="hdnVideoId" name="Video.Video_Id" />
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Video Name</label>
+                                <input type="text" class="form-control required" id="txtVideoName" name="Video.Video_Name" placeholder="Video Name" value="@Model.Video.Video_Name">
+                                <span class="error"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Video URL</label>
+                                <input type="text" class="form-control required" id="txtvideourl" name="Video.Video_Url" placeholder="Video URL" value="@Model.Video.Video_Url">
+                                <span class="error"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Receipe Name</label>
+                                <select class="form-control required" name="Video.Receipe_Id" id="ddReceip" placeholder="Receipe Name">
+                                    <option value=" " selected>Select Receipe </option>
+                                    @if (Model.lst_Receipe != null)
+                                    {
+                                        foreach (var item in Model.lst_Receipe)
+                                        {
+                                            if (item.ReceipeId == Model.Video.Receipe_Id)
+                                            {
+                                                <option value="@item.ReceipeId" selected>@item.ReceipeName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.ReceipeId">@item.ReceipeName</option>
+                                            }
+
+                                        }
+                                    }
+                                </select>
+                                <span class="error"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Product Name</label>
+                                <select class="form-control required" name="Video.Product_Id" id="ddproduct" placeholder="Product Name">
+                                    <option value="" selected>Select Product</option>
+                                    @if (Model.lst_Product != null)
+                                    {
+                                        foreach (var item in Model.lst_Product)
+                                        {
+                                            if (item.ProductId == Model.Video.Product_Id)
+                                            {
+                                                <option value="@item.ProductId" selected>@item.ProductName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.ProductId">@item.ProductName</option>
+                                            }
+
+                                        }
+                                    }
+                                </select>
+                                <span class="error"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Video Description</label>
+                                <textarea class="form-control required" id="txtVideo_Discription" name="Video.Video_Discription" placeholder="Video Description" rows="3" value="@Model.Video.Video_Discription"></textarea>
+                                <span class="error"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-6">
+                            <button id="btnSubmit" type="submit" class="btn btn-primary">Save</button>
+
+                            <a class="btn btn-primary" href="@Url.Action("VideoMaster","VideoMaster")">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="myGrid_Video" style="height: 500px; width:100%;" class="ag-theme-alpine"></div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        debugger;
+        if ('@ViewBag.Result'!= "")
+        {
+            if ('@ViewBag.Result' == "1") {
+                $('.dvSuccess').show();
+            }
+            else if('@ViewBag.Result' == "2")
+            {
+                $('.dvUpdate').show();
+            }
+            else {
+                $('.dvError').show();
+            }
+        }
+        $("#dvMsg").delay(2000).hide(0);
+    });
+</script>

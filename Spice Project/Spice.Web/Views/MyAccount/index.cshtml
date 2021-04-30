@@ -1,0 +1,527 @@
+﻿@model Spice.DataContarct.ViewModel.CustomerMaster_ViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutFrontEnd.cshtml";
+}
+
+<!-- Modal -->
+<div class="modal fade" id="addAddress" tabindex="-1" aria-labelledby="addAddress" aria-hidden="true">
+    <div class="modal-dialog">
+        <form id="frmAddAddress" method="post" enctype="multipart/form-data">
+            <div class="modal-content add-address-modal">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Address</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="clearForm()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-3 form-group">
+                            <p>Address Name</p>
+                        </div>
+                        <div class="col-lg-9 form-group">
+                            <input name="customerAddressMaster.Id" id="hdnAddressId" type="hidden">
+                            <input name="customerAddressMaster.Customer_Id" id="hdnCustomerId" value="@Model.customerMaster.Id" type="hidden">
+                            <input class="required" name="customerAddressMaster.Street_1" id="txtStreet_1" max="100" onblur="validateStreet_1()" placeholder="Home, Work, Other.." type="text">
+                            <span class="error" id="errorStreet_1"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 form-group">
+                            <p>Address</p>
+                        </div>
+                        <div class="col-lg-9 form-group">
+                            <textarea class="required" name="customerAddressMaster.Street_2" id="txtStreet_2" max="100" onblur="validateStreet_2()" placeholder="Entire Address"></textarea>
+                            <span class="error" id="errorStreet_2"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 form-group">
+                            <p>City</p>
+                        </div>
+                        <div class="col-lg-9 form-group">
+                            <textarea class="required" name="customerAddressMaster.City" max="100" id="txtCity" onblur="validateCity()" placeholder="City"></textarea>
+                            <span class="error" id="errorCity"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 form-group">
+                            <p>State</p>
+                        </div>
+                        <div class="col-lg-9 form-group">
+                            <textarea class="required" name="customerAddressMaster.State" id="txtState" max="100" onblur="validateState()" placeholder="State"></textarea>
+                            <span class="error" id="errorState"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 form-group">
+                            <p>Zip code</p>
+                        </div>
+                        <div class="col-lg-9 form-group">
+                            <input type="number" class="required" name="customerAddressMaster.Pincode" id="txtPincode" max="10" onblur="validatePincode()" placeholder="Zip">
+                            <span class="error" id="errorPincode"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <div class="form-group col-md-6">
+                            <label>Country</label>
+                            <select id="inputCountry" class="form-control" name="customerAddressMaster.Country" placeholder="Country">
+                                <option value="" selected>Select...</option>
+                                @if (Model.lst_country != null)
+                                {
+                                    foreach (var item in Model.lst_country)
+                                    {
+                                        <option value="@item.Iso">@item.CountryName</option>
+                                    }
+                                }
+                            </select>
+                            <span class="error"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="clearForm()">Close</button>
+                    <button type="button" id="btnAddAddressSubmit" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/MyAccount/MyAccount.js"></script>
+<div id="main">
+    <!-- Header Start -->
+    <div id="header"></div>
+    <!-- Header End -->
+    <!-- Breadcrumb Area start -->
+    <section class="breadcrumb-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="breadcrumb-content">
+                        <h1 class="breadcrumb-hrading">Account Page</h1>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Area End -->
+    <!-- account area start -->
+    <div class="checkout-area mtb-60px">
+        <div class="container">
+            <div id="dvMsg">
+                <div class="alert alert-success dvSuccess" style="display:none;">
+                    <div class="d-flex align-items-center justify-content-start">
+                        <span class="alert-icon">
+                            <i class="anticon anticon-check-o"></i>
+                        </span>
+                        <span>Record Addedd Successfully!!!</span>
+                    </div>
+                </div>
+                <div class="alert alert-success dvDelete" style="display:none;">
+                    <div class="d-flex align-items-center justify-content-start">
+                        <span class="alert-icon">
+                            <i class="anticon anticon-check-o"></i>
+                        </span>
+                        <span>Address Deleted Successfully!!!</span>
+                    </div>
+                </div>
+                <div class="alert alert-success dvPassSuccess" style="display:none;">
+                    <div class="d-flex align-items-center justify-content-start">
+                        <span class="alert-icon">
+                            <i class="anticon anticon-check-o"></i>
+                        </span>
+                        <span>Password Changed Successfully!!!</span>
+                    </div>
+                </div>
+                <div class="alert alert-danger dvError" style="display:none;">
+                    <div class="d-flex justify-content-start">
+                        <span class="alert-icon m-r-20 font-size-30">
+                            <i class="anticon anticon-close-circle"></i>
+                        </span>
+                        <div>
+                            <h5 class="alert-heading">Error</h5>
+                            <p>Failed to Insert</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-danger dvValidateExt" style="display:none;">
+                    <div class="d-flex justify-content-start">
+                        <span class="alert-icon m-r-20 font-size-30">
+                            <i class="anticon anticon-close-circle"></i>
+                        </span>
+                        <div>
+                            <h5 class="alert-heading">Validation</h5>
+                            <p>this file type is not supported.Please upload image in .png and .jpg format</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-danger dvValidateFileSize" style="display:none;">
+                    <div class="d-flex justify-content-start">
+                        <span class="alert-icon m-r-20 font-size-30">
+                            <i class="anticon anticon-close-circle"></i>
+                        </span>
+                        <div>
+                            <h5 class="alert-heading">Validation</h5>
+                            <p>Allowed file size is 10 MB</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="ml-auto mr-auto col-lg-9">
+                    <div class="checkout-wrapper">
+                        <div id="faq" class="panel-group">
+                            <div class="panel panel-default single-my-account">
+                                <div class="panel-heading my-account-title">
+                                    <h3 class="panel-title"><span>1 .</span> <a data-toggle="collapse" data-parent="#faq" href="#my-account-1">Edit your account information </a></h3>
+                                </div>
+                                <form id="frmCustomer" method="post" enctype="multipart/form-data">
+                                    <div id="my-account-1" class="panel-collapse collapse show">
+                                        <div class="panel-body">
+                                            <div class="myaccount-info-wrapper">
+                                                <div class="account-info-wrapper">
+                                                    <h4>My Account Information</h4>
+                                                    <h5>Your Personal Details</h5>
+                                                </div>
+                                                <div class="row">
+                                                    <input type="hidden" value="@Model.customerMaster.Id" name="customerMaster.Id" />
+                                                    <div class="col-lg-6 col-md-6">
+                                                        <div class="form-group billing-info">
+                                                            <label>First Name</label>
+                                                            <input type="text" class="form-control required" onblur="validateFirstName()" maxlength="100" id="txtFirstName" placeholder="First Name" name="customerMaster.First_Name" value="@Model.customerMaster.First_Name">
+                                                            <span id="errorFirstName" class="error"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6 col-md-6">
+                                                        <div class="form-group billing-info">
+                                                            <label>Last Name</label>
+                                                            <input type="text" class="form-control required" onblur="validateLastName()" maxlength="100" id="txtLastName" placeholder="Last Name" name="customerMaster.Second_Name" value="@Model.customerMaster.Second_Name">
+                                                            <span id="errorLastName" class="error"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-12 col-md-12">
+                                                        <div class="form-group billing-info">
+                                                            <label>Email Address</label>
+                                                            <input type="email" class="form-control required" id="txtEmailName" placeholder="Email Name" name="customerMaster.Email" value="@Model.customerMaster.Email">
+                                                            <span class="error"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6 col-md-6">
+                                                        <div class="form-group billing-info">
+                                                            <label>Telephone</label>
+                                                            <input type="number" class="form-control required" maxlength="13" id="txtTelephone" placeholder="Telephone Name" name="customerMaster.Mobile_Number" value="@Model.customerMaster.Mobile_Number">
+                                                            <span class="error"></span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-6 col-md-6">
+                                                        <div class="form-group billing-info">
+                                                            @if (@Model.customerMaster.ProfilePicture != null)
+                                                            {
+                                                                <img id="profilePicture_img"
+                                                                     height="100"
+                                                                     width="90"
+                                                                     src="@Url.Content("~//Img//" + Model.customerMaster.ProfilePicture)"
+                                                                     style="border:solid" />
+                                                            }
+                                                            else
+                                                            {
+                                                                <img id="profilePicture_img"
+                                                                     height="100"
+                                                                     width="90"
+                                                                     src="@Url.Content("~//Img//userProfile.jpg")"
+                                                                     style="border:solid" />
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6 col-md-6">
+                                                        <div class="form-group col-md-6 divSel">
+                                                            <label>Gender</label>
+                                                            <select id="inputGender" class="form-control" name="customerMaster.Gender" placeholder="Gender">
+                                                                <option value="" selected>Select...</option>
+                                                                @if (Model.gender != null)
+                                                                {
+                                                                    foreach (var item in Model.gender)
+                                                                    {
+                                                                        if (Model.customerMaster.Gender == item.Value)
+                                                                        {
+                                                                            <option value="@item.Value" selected>@item.Key</option>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <option value="@item.Value">@item.Key</option>
+                                                                        }
+
+                                                                    }
+                                                                }
+
+                                                            </select>
+
+                                                            <span class="error"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6 col-md-6">
+                                                        <div class="form-group billing-info">
+                                                            <label>Upload Profile</label>
+                                                            <input type="file" class="form-control" name="ImageData" id="ImageData" onchange="show(this)" />
+                                                            <input type="hidden" class="form-control" value="@Model.customerMaster.ProfilePicture" name="customerMaster.LastProfilePicture" id="hdnProfilePicture" />
+                                                            <span class="error"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6">
+                                                    <div class="form-group billing-info">
+                                                        <label>Date</label>
+                                                        <input type="date" class="form-control required dob" max="@DateTime.Now.ToString("yyyy-MM-dd")" id="txtDate" placeholder="Date" name="customerMaster.DOB" value="@Model.customerMaster.DOB_string">
+                                                        <span class="error"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="billing-back-btn">
+                                                    <div class="billing-back">
+                                                        <a href="#"><i class="fa fa-arrow-up"></i> back</a>
+                                                    </div>
+                                                    <div class="billing-btn">
+                                                        @*<button type="submit">Continue</button>*@
+                                                        <button id="btnSubmit" type="submit" value="Submit">Continue</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="panel panel-default single-my-account">
+                                <div class="panel-heading my-account-title">
+                                    <h3 class="panel-title"><span>2 .</span> <a data-toggle="collapse" data-parent="#faq" href="#my-account-2">Change your password </a></h3>
+                                </div>
+                                <div id="my-account-2" class="panel-collapse collapse">
+                                    <form id="frmPassword" method="post" enctype="multipart/form-data">
+                                        <div class="panel-body">
+                                            <div class="myaccount-info-wrapper">
+                                                <div class="account-info-wrapper">
+                                                    <h4>Change Password</h4>
+                                                    <h5>Your Password</h5>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-12 col-md-12">
+                                                        <div class="form-group billing-info">
+                                                            <label>Password</label>
+                                                            <input type="hidden" class="form-control" id="idPassword" placeholder="Password" name="customerMaster.Id" value="@Model.customerMaster.Id" />
+                                                            <input type="password" class="form-control required" id="txtPassword" onblur="validatePassword();" placeholder="Password" name="customerMaster.Password" />
+                                                            <span class="error"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-12 col-md-12">
+                                                        <div class="form-group billing-info">
+                                                            <label>Password Confirm</label>
+                                                            <input type="password" class="form-control required" id="txtConfirmPassword" onblur="validatePassword();" placeholder="Confirm Password" name="customerMaster.ConfirmPassword" />
+                                                            <span id="changepassworderr" class="error"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="billing-back-btn">
+                                                    <div class="billing-back">
+                                                        <a href="#"><i class="fa fa-arrow-up"></i> back</a>
+                                                    </div>
+                                                    <div class="billing-btn">
+                                                        <button type="submit" id="btnPassword">Continue</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="panel panel-default single-my-account">
+                                <div class="panel-heading my-account-title">
+                                    <h3 class="panel-title"><span>3 .</span> <a data-toggle="collapse" data-parent="#faq" href="#my-account-3">Modify your address book entries </a></h3>
+                                </div>
+                                <div id="my-account-3" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        <div class="myaccount-info-wrapper">
+                                            <div class="account-info-wrapper">
+                                                <h4 class="address-add-h">
+                                                    Address Book Entries
+                                                    <span>
+                                                        <a href="#" class="address-add" data-toggle="modal" data-target="#addAddress">
+                                                            <i class="ion-android-add"></i> Add
+                                                        </a>
+                                                    </span>
+                                                </h4>
+                                            </div>
+                                            <div class="row">
+                                                @if (Model.lst_customerAddressMaster != null)
+                                                {
+                                                    var count = 1;
+                                                    foreach (var item in Model.lst_customerAddressMaster)
+                                                    {
+                                                        <div class="col-lg-6">
+                                                            <div class="ship-bill-address list-product">
+                                                                <p class="address-title2">
+                                                                    Address @count
+                                                                    <span>
+                                                                        <a href="#" class="address-edit">
+                                                                            <i class="ion-edit" onclick="GetAddressMasterGetAddressMasterDataByIdDataById(@item.Id)"></i>
+                                                                        </a>
+                                                                        <a href="@Url.Action("DeleteCustomerAddress", "MyAccount")?Id=@item.Id&&CId=@item.Customer_Id" class="address-delete">
+                                                                            <i class="ion-android-delete"></i>
+                                                                        </a>
+                                                                    </span>
+                                                                </p>
+                                                                <p class="address-name">@item.Street_1</p>
+                                                                <p>@item.Street_2,@item.City,@item.State,@item.Country,@item.Pincode</p>
+                                                            </div>
+                                                        </div>
+                                                        count++;
+                                                    }
+                                                }
+                                            </div>
+                                            <div class="billing-back-btn">
+                                                <div class="billing-back">
+                                                    <a href="#"><i class="fa fa-arrow-up"></i> back</a>
+                                                </div>
+                                                <div class="billing-btn">
+                                                    <button type="submit">Continue</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default single-my-account">
+                                <div class="panel-heading my-account-title">
+                                    <h3 class="panel-title"><span>4. </span> <a data-toggle="collapse" data-parent="#faq" href="#my-account-5">My Order </a></h3>
+                                </div>
+                                <div id="my-account-5" class="panel-collapse collapse">
+                                    <form id="frmPassword" method="post" enctype="multipart/form-data">
+                                        <div class="panel-body">
+                                            <div class="myaccount-info-wrapper">
+                                                <div class="account-info-wrapper">
+                                                    <h4>Order Details</h4>
+                                                </div>
+                                                @if (Model.lst_order != null)
+                                                {
+                                                    foreach (var item in Model.lst_order)
+                                                    {
+                                                        <div class="row">
+                                                            <div class="col-lg-3 col-md-12">
+                                                                <div class="form-group">
+                                                                    <label>Order Date</label>
+                                                                    <input type="text" class="form-control" value="@Convert.ToDateTime(item.Order_Date).ToString("dd-MMM-yyyy")" readonly />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-3 col-md-12">
+                                                                <div class="form-group">
+                                                                    <label>Order</label>
+                                                                    <input type="text" class="form-control" value="@item.Order_Invoice_Number" readonly />
+
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-lg-3 col-md-12">
+                                                                <div class="form-group">
+                                                                    <label>Order Status</label>
+                                                                    <input type="text" class="form-control" value="@item.EnumOrderStatus.ToString().Replace("_"," ")" readonly />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-2 col-md-12">
+                                                                <div class="form-group">
+                                                                    <label>Order Details</label>
+                                                                    <button type="button" class="btn btn-info form-control" onclick="ViewOrder(@item.Id)">View</button>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                }
+                                                <div class="billing-back-btn">
+                                                    <div class="billing-back">
+                                                        <a href="#"><i class="fa fa-arrow-up"></i> back</a>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" tabindex="-1" role="dialog" id="modalViewOrder">
+        <div class="modal-dialog" role="document" style="max-width:80% !important">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Order Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="dvViewOrder">                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- account area end -->
+    <!-- Footer Area start -->
+    <div id="footer"></div>
+    <!--  Footer Area End -->
+</div>
+<script>
+    $(document).ready(function () {
+
+        if ('@ViewBag.Result'!= "")
+        {
+            if ('@ViewBag.Result' == "1") {
+                $('.dvSuccess').show();
+            }
+            else if('@ViewBag.Result' == "2")
+            {
+                $('.dvDelete').show();
+            }
+            else if('@ViewBag.Result' == "3")
+            {
+                $('.dvPassSuccess').show();
+            }
+            else if('@ViewBag.Result' == "4")
+            {
+                $('.dvValidateExt').show();
+            }
+            else if('@ViewBag.Result' == "5")
+            {
+                $('.dvValidateFileSize').show();
+            }
+            else {
+                $('.dvError').show();
+            }
+        }
+        $("#dvMsg").delay(2000).hide(0);
+
+
+    });
+    function ViewOrder(OrderId) {
+        $.ajax({
+            url: '@Url.Action("GetOrderById", "MyAccount")',
+            type: "GET",           
+            data: { OrderId: OrderId },
+            success: function (data) {
+                $('#modalViewOrder').modal({ backdrop: 'static', keyboard: false });
+                $('#modalViewOrder').modal('show');
+                $('#dvViewOrder').html('');
+                $('#dvViewOrder').html(data);
+            }
+        });
+    }
+</script>

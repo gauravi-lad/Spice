@@ -1,0 +1,160 @@
+﻿@model Spice.DataContarct.ViewModel.Cart_ViewModel
+@{
+
+    Layout = "~/Views/Shared/_LayoutBackEnd.cshtml";
+}
+}
+
+<h2>Cart</h2>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Enlink - Admin Dashboard Template</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="..\assets\images\logo\favicon.png">
+    <!-- page css -->
+    <!-- Core css -->
+    @*<link href="..\assets\css\app.min.css" rel="stylesheet">*@
+    <link href="\Assets\BackEnd\css\app.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <form id="frmCart" method="post" enctype="multipart/form-data">
+        <!-- Content Wrapper START -->
+        <div class="main-content">
+            <div class="page-header">
+                <h2 class="header-title">Cart</h2>
+                <div class="header-sub-title">
+                    <nav class="breadcrumb breadcrumb-dash">
+                        <a href="#" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+                        <a class="breadcrumb-item" href="#">Cart</a>
+                        <span class="breadcrumb-item active">Cart</span>
+                    </nav>
+                </div>
+            </div>
+            <div class="card">
+                <div id="dvMsg">
+                    <div class="alert alert-success dvSuccess" style="display:none;">
+                        <div class="d-flex align-items-center justify-content-start">
+                            <span class="alert-icon">
+                                <i class="anticon anticon-check-o"></i>
+                            </span>
+                            <span>Record Addedd Successfully!!!</span>
+                        </div>
+                    </div>
+                    <div class="alert alert-success dvUpdate" style="display:none;">
+                        <div class="d-flex align-items-center justify-content-start">
+                            <span class="alert-icon">
+                                <i class="anticon anticon-check-o"></i>
+                            </span>
+                            <span>Record Updated Successfully!!!</span>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger dvError" style="display:none;">
+                        <div class="d-flex justify-content-start">
+                            <span class="alert-icon m-r-20 font-size-30">
+                                <i class="anticon anticon-close-circle"></i>
+                            </span>
+                            <div>
+                                <h5 class="alert-heading">Error</h5>
+                                <p>Failed to Insert</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div style="">
+
+                        <div class="form-row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Customer ID:</label>
+                                    <label id="lblCustomerID">@Model.cart_DataModel.Customer_ID</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Product ID:</label>
+                                    <label id="lblProductID">@Model.cart_DataModel.Product_ID</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Product Sku ID:</label>
+                                    <label id="lblProduckSkuID">@Model.cart_DataModel.ProductSku_ID</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Unit</label>
+                                    <input type="text" class="form-control" id="txtUnit" name="cart_DataModel.Unit" placeholder="Unit" value="@Model.cart_DataModel.Unit">
+                                    <span class="error"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Quantity</label>
+                                    <input type="text" class="form-control" id="txtQuantity" name="cart_DataModel.Quantity" placeholder="Quantity" value="@Model.cart_DataModel.Quantity">
+                                    <span class="error"></span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Amount:</label>
+                                    <label id="lblamount">@Model.cart_DataModel.Amount</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Discount:</label>
+                                    <label id="lblDiscount">@Model.cart_DataModel.Discount</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <button id="btnSubmit" type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </form>
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+
+        if ('@ViewBag.Result'!= "")
+        {
+            if ('@ViewBag.Result' == "1") {
+                $('.dvSuccess').show();
+            }
+            else if('@ViewBag.Result' == "2")
+            {
+                $('.dvUpdate').show();
+            }
+            else {
+                $('.dvError').show();
+            }
+        }
+        $("#dvMsg").delay(2000).hide(0);
+    });
+</script>

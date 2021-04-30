@@ -1,0 +1,333 @@
+﻿@model Spice.DataContarct.ViewModel.OrderMaster_ViewModel
+@{
+
+
+    Layout = "~/Views/Shared/_LayoutFrontEnd.cshtml";
+}
+
+<script src="~/Scripts/FrontEnd/FrontEnd_Event.js"></script>
+<script src="~/Scripts/FrontEnd/FrontEnd_Method.js"></script>
+<input type="hidden" name="ProductDetails.CustomerId" id="hdnCustomerId" value="@Model.orderMaster.Customer_Id" />
+<input type="hidden" name="IsShipping" id="hdnIsShipping" value="" />
+<!-- Breadcrumb Area start -->
+<section class="breadcrumb-area checkout-banner">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="breadcrumb-content">
+                    <h1 class="breadcrumb-hrading">Checkout Page</h1>
+                    <ul class="breadcrumb-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li>Checkout</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Area End -->
+<!-- checkout area start -->
+<form action="/OrderMaster/Insert" method="post">
+
+    <input type="hidden" value="@Model.orderMaster.Customer_Id" name="orderMaster.Customer_Id" />
+    <input type="hidden" name="orderMaster.Id" value="@Model.orderMaster.Id" />
+    @*<input type="hidden" name="order_Item_Details[0].ProductId" value="@Model.order_Item_Details[0].ProductId" />
+        <input type="hidden" name="order_Item_Details[0].Quantity" value="@Model.order_Item_Details[0].Quantity" />
+        <input type="hidden" name="order_Item_Details[0].Unit" value="@Model.order_Item_Details[0].Unit" />
+        <input type="hidden" name="order_Item_Details[0].UnitPrice" value="@Model.order_Item_Details[0].UnitPrice" />
+        <input type="hidden" name="order_Item_Details[0].TaxId" value="@Model.order_Item_Details[0].TaxId" />
+        <input type="hidden" name="order_Item_Details[0].TaxAmmount" value="@Model.order_Item_Details[0].TaxAmmount" />
+        <input type="hidden" name="order_Item_Details[0].FinalAmmount" value="@Model.order_Item_Details[0].FinalAmmount" />
+        <input type="hidden" name="order_Item_Details[0].SKU" value="@Model.order_Item_Details[0].SKU" />*@
+    <input type="hidden" name="orderMaster.Shipping_Charges" value="@Model.orderMaster.Shipping_Charges" />
+    <input type="hidden" name="orderMaster.Payment_Method" value="@Model.orderMaster.Payment_Method" />
+    <input type="hidden" name="orderMaster.Payment_Mode" value="@Model.orderMaster.Payment_Mode" />
+    <input type="hidden" name="orderMaster.Payment_Status" value="@Model.orderMaster.Payment_Status" />
+
+    <input type="hidden" id="hdnShippingAdressId" value="@Model.orderMaster.CustomerAdressId" name="orderMaster.CustomerAdressId" />
+    <input type="hidden" id="hdnBillingAdressId" value="@Model.orderMaster.CustomerBillingAdressId" name="orderMaster.CustomerBillingAdressId" />
+
+
+    <div class="checkout-area mt-60px mb-40px">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-7">
+                    <div class="billing-info-wrap">
+                        <h3 class="address-add-h mb-3">
+                            Shipping Details
+                            <span>
+                                <a href="#" class="address-add" data-toggle="modal" data-target="#addAddress" onclick="javascript: SetIsShipping(1);">
+                                    <i class="ion-android-add"></i> Add
+                                </a>
+                            </span>
+                        </h3>
+
+                        <div class="row address-add-row">
+                            @{
+                                if (Model.CustomerAddressList != null && Model.CustomerAddressList.Count > 0)
+                                {
+                                    int i = 1;
+                                    foreach (var item in Model.CustomerAddressList.Where(a => a.IsShipping == true).ToList())
+                                    {
+                                        if (i == 1)
+                                        {
+                                            <div class="col-lg-6">
+                                                <div class="ship-bill-address list-product">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input rdoShipping" type="radio" data-shipping="@item.Id" name="shippingAddressRadios" id="shipaddress_@i" value="" checked>
+                                                        <label class="form-check-label address-title" for="shipaddress_@i">Address @i</label>
+                                                    </div>
+                                                    <p class="address-name">@item.Customer_Name</p>
+                                                    <p>@item.Street_1, @item.Street_2, @item.City, @item.State, @item.CountryName - @item.Pincode</p>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-lg-6">
+                                                <div class="ship-bill-address list-product">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input rdoShipping" type="radio" data-shipping="@item.Id" name="shippingAddressRadios" id="shipaddress_@i" value="">
+                                                        <label class="form-check-label address-title" for="shipaddress_@i">Address @i</label>
+                                                    </div>
+                                                    <p class="address-name">@item.Customer_Name</p>
+                                                    <p>@item.Street_1, @item.Street_2, @item.City, @item.State, @item.CountryName - @item.Pincode</p>
+                                                </div>
+                                            </div>
+                                        }
+                                        i++;
+                                    }
+                                }
+                            }
+
+                        </div>
+
+                        <hr />
+
+                        <h3 class="address-add-h mb-3">
+                            Billing Details
+                            <span>
+                                <a href="#" class="address-add" data-toggle="modal" data-target="#addAddress" onclick="javascript: SetIsShipping(0);">
+                                    <i class="ion-android-add"></i> Add
+                                </a>
+                            </span>
+                        </h3>
+
+                        <div class="row address-add-row">
+                            @{
+                                if (Model.CustomerAddressList != null && Model.CustomerAddressList.Count > 0)
+                                {
+                                    int j = 1;
+                                    foreach (var item in Model.CustomerAddressList.Where(a => a.IsDelivery == true).ToList())
+                                    {
+                                        if (j == 1)
+                                        {
+                                            <div class="col-lg-6">
+                                                <div class="ship-bill-address list-product">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input rdoBilling" type="radio" data-billing="@item.Id" name="billingAddressRadios" id="billaddress_@j" value="" checked>
+                                                        <label class="form-check-label address-title" for="billaddress_@j">Address @j</label>
+                                                    </div>
+                                                    <p class="address-name">@item.Customer_Name</p>
+                                                    <p>@item.Street_1, @item.Street_2, @item.City, @item.State, @item.CountryName - @item.Pincode</p>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-lg-6">
+                                                <div class="ship-bill-address list-product">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input rdoBilling" type="radio" data-billing="@item.Id" name="billingAddressRadios" id="billaddress_@j" value="">
+                                                        <label class="form-check-label address-title" for="billaddress_@j">Address @j</label>
+                                                    </div>
+                                                    <p class="address-name">@item.Customer_Name</p>
+                                                    <p>@item.Street_1, @item.Street_2, @item.City, @item.State, @item.CountryName - @item.Pincode</p>
+                                                </div>
+                                            </div>
+                                        }
+                                        j++;
+                                    }
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="your-order-area">
+                        <h3>Your order</h3>
+                        <div class="your-order-wrap gray-bg-4">
+                            <div class="your-order-product-info">
+                                <div class="your-order-top">
+                                    <ul>
+                                        <li>Product</li>
+                                        <li>Total</li>
+                                    </ul>
+                                </div>
+                                <div class="your-order-middle">
+                                    <ul>
+                                        @if (Model.order_Item_Details != null && Model.order_Item_Details.Count > 0)
+                                        {
+                                            var count = 0;
+                                            foreach (var item in Model.order_Item_Details)
+                                            {
+                                                var LineTotal = @item.RatePerPc * @item.Quantity;
+                                                <li>
+                                                    <span class="order-middle-left">@item.ProductName (@item.Unit) X @item.Quantity</span>
+                                                    <span id="spnProductPrice" class="order-price">$ @LineTotal </span>
+                                                </li>
+                                                <input type="hidden" name="order_Item_Details[@count].ProductId" value="@item.Product_ID" />
+                                                <input type="hidden" name="order_Item_Details[@count].Quantity" value="@item.Quantity" />
+                                                <input type="hidden" name="order_Item_Details[@count].Unit" value="@item.Unit" />
+                                                <input type="hidden" name="order_Item_Details[@count].UnitPrice" value="@item.RatePerPc" />
+                                                <input type="hidden" name="order_Item_Details[@count].TaxId" value="@item.TaxId" />
+                                                <input type="hidden" name="order_Item_Details[@count].TaxAmmount" value="@item.TaxAmmount" />
+                                                <input type="hidden" name="order_Item_Details[@count].FinalAmmount" value="@item.FinalAmmount" />
+                                                <input type="hidden" name="order_Item_Details[@count].SKU" value="@item.ProductSku_ID" />
+                                                count++;
+                                            }
+                                        }
+
+                                    </ul>
+                                </div>
+                                <div class="your-order-bottom">
+                                    <ul>
+                                        <li class="your-order-shipping">Shipping</li>
+                                        <li>Free shipping</li>
+                                    </ul>
+                                </div>
+                                <div class="your-order-total">
+                                    <ul>
+                                        <li class="order-total">Total</li>
+                                        <li id="liTotalPrice">$ @Model.order_Item_Details[0].FinalAmmount</li>
+                                        <input type="hidden" name="order_Item_Details[0].FinalAmmount" value="@Model.order_Item_Details[0].FinalAmmount" />
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="payment-method">
+                                <div class="payment-accordion element-mrg">
+                                    <div class="panel-group" id="accordion">
+                                        <div class="panel payment-accordion">
+                                            <div class="panel-heading" id="method-one">
+                                                <h4 class="panel-title">
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#method1">
+                                                        Direct bank transfer
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="method1" class="panel-collapse collapse show">
+                                                <div class="panel-body">
+                                                    <p>Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="panel payment-accordion">
+                                            <div class="panel-heading" id="method-two">
+                                                <h4 class="panel-title">
+                                                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#method2">
+                                                        Check payments
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="method2" class="panel-collapse collapse">
+                                                <div class="panel-body">
+                                                    <p>Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="panel payment-accordion">
+                                            <div class="panel-heading" id="method-three">
+                                                <h4 class="panel-title">
+                                                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#method3">
+                                                        Cash on delivery
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="method3" class="panel-collapse collapse">
+                                                <div class="panel-body">
+                                                    <p>Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="Place-order mt-25">
+                            <a class="btn-hover" onclick="SetAddress(this);" href="#">Place Order</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- checkout area end -->
+<!-- Modal Checkout Page -->
+<div class="modal fade" id="addAddress" tabindex="-1" aria-labelledby="addAddress" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content add-address-modal">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Address</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-3 form-group">
+                        <p>Street 1</p>
+                    </div>
+                    <div class="col-lg-9 form-group">
+                        <input name="Street_1" placeholder="Street 1" type="text">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 form-group">
+                        <p>Street 2</p>
+                    </div>
+                    <div class="col-lg-9 form-group">
+                        <input name="Street_2" placeholder="Street 2" type="text">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 form-group">
+                        <p>Pincode</p>
+                    </div>
+                    <div class="col-lg-9 form-group">
+                        <input name="Pincode" placeholder="Pincode" type="text">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 form-group">
+                        <p>City</p>
+                    </div>
+                    <div class="col-lg-9 form-group">
+                        <input name="City" placeholder="City" type="text">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 form-group">
+                        <p>State</p>
+                    </div>
+                    <div class="col-lg-9 form-group">
+                        <input name="State" placeholder="State" type="text">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 form-group">
+                        <p>Country</p>
+                    </div>
+                    <div class="col-lg-9 form-group">
+                        <input name="CountryName" placeholder="Country" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" onclick="javascript: SaveAddress();" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal end -->

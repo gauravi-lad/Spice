@@ -1,0 +1,79 @@
+﻿@model Spice.DataContarct.ViewModel.OrderMaster_ViewModel
+
+@{
+    ViewBag.Title = "ProductPriceSKU_ViewModel";
+    Layout = "~/Views/Shared/_LayoutBackEnd.cshtml";
+}
+<script src="~/Scripts/Order/OrderListing.js"></script>
+
+<div class="main-content">
+    <div class="page-header">
+        <h2 class="header-title">Vendor List</h2>
+        <div class="header-sub-title">
+            <nav class="breadcrumb breadcrumb-dash">
+                <a href="#" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+                <a class="breadcrumb-item" href="#">Master</a>
+                <span class="breadcrumb-item active">Order Listing</span>
+            </nav>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row m-b-20">
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <div class="d-md-flex">
+                            <div class="input-affix">
+                                <i class="prefix-icon anticon anticon-info-circle"></i>
+                                <input type="text" class="form-control form-control-sm" id="txtInvoinceNo" placeholder="Order Invioce No." />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <div class="d-md-flex">
+                            <div class="input-affix">
+                                <i class="prefix-icon anticon anticon-calendar"></i>
+                                <input type="text" class="form-control form-control-sm datepicker-input" id="txtFromData" placeholder="Order From Date">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <div class="d-md-flex">
+                            <div class="input-affix">
+                                <i class="prefix-icon anticon anticon-calendar"></i>
+                                <input type="text" class="form-control form-control-sm datepicker-input" id="txtToData" placeholder="Order To Date">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <div class="d-md-flex">
+                            <div class="input-affix">
+                                <i class="prefix-icon anticon anticon-calendar"></i>
+                                <select class="custom-select form-control-sm custom-select-prefix" style="min-width: 180px;" id="drpStatus">
+                                    <option value="" selected="">Status</option>
+                                    @foreach (var item in Model.drp_OrderStatus)
+                                    {
+                                        <option value="@item.Key">@item.Value.Replace('_', ' ') </option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <a class="btn btn-primary btn-sm" id="btnSearch" href="#">
+                        <span>Search</span>
+                    </a>
+                </div>
+            </div>
+           <div id="partialOrderListingTable"></div> 
+        </div>
+    </div>
+</div>
