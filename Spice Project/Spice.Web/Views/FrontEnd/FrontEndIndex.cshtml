@@ -1,0 +1,324 @@
+﻿@{ Layout = "~/Views/Shared/_LayoutFrontEnd.cshtml"; }
+
+<script src="~/Scripts/FrontEnd/FrontEnd_Event.js"></script>
+<script src="~/Scripts/FrontEnd/FrontEnd_Method.js"></script>
+
+<input type="hidden" id="hdnPaymentFailed" value="@ViewBag.PaymentFailed" />
+<input type="hidden" id="hdnPaymentSuccessfull" value="@ViewBag.PaymentSucessfull" />
+<input type="hidden" id="hdnOrderResult" value="@ViewBag.Result" />
+
+<!-- Slider Arae Start -->
+<div class="slider-area home-2 home-4">
+    <div class="slider-active-3 owl-carousel slider-hm8 owl-dot-style">
+        <!-- Slider Single Item Start -->
+        <div class="slider-height-6 d-flex align-items-start justify-content-start bg-img" style="background-image: url(Images/1920x816-1.jpg);">
+            <div class="container">
+                <div class="slider-content-5 slider-animated-1 text-left">
+                    <span class="animated">100% NATURAL</span>
+                    <h1 class="animated">
+                        Fresh Spices<br />
+                        And Receipe
+                    </h1>
+                    @*<a href="shop-4-column.html" class="shop-btn animated">SHOP NOW</a>*@
+                </div>
+            </div>
+        </div>
+        <!-- Slider Single Item End -->
+        <!-- Slider Single Item Start -->
+        <div class="slider-height-6 d-flex align-items-start justify-content-start bg-img" style="background-image: url(Images/1920x816-2.jpg);">
+            <div class="container">
+                <div class="slider-content-5 slider-animated-1 text-left">
+                    <span class="animated">BEST OFFER SALE !</span>
+                    <h1 class="animated">
+                        Up To 70% Off <br />
+                        Fresh Spice
+                    </h1>
+                    @*<a href="shop-4-column.html" class="shop-btn animated">SHOP NOW</a>*@
+                </div>
+            </div>
+        </div>
+        <!-- Slider Single Item End -->
+    </div>
+</div>
+<!-- Slider Arae End -->
+<!-- Static Area Start -->
+<section class="static-area mtb-30px">
+    <div class="container">
+        <div class="static-area-wrap">
+            <div class="row">
+                <!-- Static Single Item Start -->
+                <div class="col-lg-3 col-xs-12 col-md-6 col-sm-6">
+                    <div class="single-static pb-res-md-0 pb-res-sm-0 pb-res-xs-0">
+                        <img src="~/Assets/FrontEnd/images/icons/static-icons-1.png" alt="" class="img-responsive" />
+                        <div class="single-static-meta">
+                            <h4>Free Shipping</h4>
+                            <p>On all orders over $75.00</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Static Single Item End -->
+                <!-- Static Single Item Start -->
+                <div class="col-lg-3 col-xs-12 col-md-6 col-sm-6">
+                    <div class="single-static pb-res-md-0 pb-res-sm-0 pb-res-xs-0 pt-res-xs-20">
+                        <img src="~/Assets/FrontEnd/images/icons/static-icons-2.png" alt="" class="img-responsive" />
+                        <div class="single-static-meta">
+                            <h4>Free Returns</h4>
+                            <p>Returns are free within 9 days</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Static Single Item End -->
+                <!-- Static Single Item Start -->
+                <div class="col-lg-3 col-xs-12 col-md-6 col-sm-6">
+                    <div class="single-static pt-res-md-30 pb-res-sm-30 pb-res-xs-0 pt-res-xs-20">
+                        <img src="~/Assets/FrontEnd/images/icons/static-icons-3.png" alt="" class="img-responsive" />
+                        <div class="single-static-meta">
+                            <h4>100% Payment Secure</h4>
+                            <p>Your payment are safe with us.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Static Single Item End -->
+                <!-- Static Single Item Start -->
+                <div class="col-lg-3 col-xs-12 col-md-6 col-sm-6">
+                    <div class="single-static pt-res-md-30 pb-res-sm-30 pt-res-xs-20">
+                        <img src="~/Assets/FrontEnd/images/icons/static-icons-4.png" alt="" class="img-responsive" />
+                        <div class="single-static-meta">
+                            <h4>Support 24/7</h4>
+                            <p>Contact us 24 hours a day</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Static Single Item End -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Static Area End -->
+<!-- Banner Area Start -->
+<div class="banner-area home-2">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 col-xs-12">
+                <div class="banner-wrapper">
+                    <!-- Home Image 1-2-3 # Roshin-->
+                    <a href="#"><img src="~/Images/330x315-1.jpg" alt="" /></a>
+                </div>
+            </div>
+            <div class="col-md-6 col-xs-12 mt-res-sx-30px">
+                <div class="banner-wrapper">
+                    <a href="#"><img src="~/Images/690x315-1.jpg" alt="" /></a>
+                </div>
+            </div>
+            <div class="col-md-3 col-xs-12 mt-res-sx-30px">
+                <div class="banner-wrapper">
+                    <a href="#"><img src="~/Images/330x315-2.jpg" alt="" /></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Banner Area End -->
+<!-- Best Sells Area Start -->
+<input type="hidden" name="ProductDetails.CustomerId" id="hdnCustomerId" value="0" />
+<section class="best-sells-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Section Title -->
+                <div class="section-title">
+                    <h2>Best Sellers</h2>
+                    <p>Add bestselling products to weekly line up</p>
+                </div>
+                <!-- Section Title -->
+            </div>
+        </div>
+        <!-- Best Sell Slider Carousel Start -->
+        <div class="best-sell-slider owl-carousel owl-nav-style">
+            <!-- Single Item -->
+            @{ Html.RenderPartial("_ProductListBestSeller"); }
+            <!-- Single Item -->
+        </div>
+        <!-- Best Sell Slider Carousel End -->
+    </div>
+</section>
+<!-- Best Sell Area End -->
+<!-- Feature Area 2 Start -->
+<section class="feature-area-2">
+    <div class="feature-area-info">
+        <div class="container">
+            <div class="row">
+                <!-- left side -->
+                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                    <div class="feature-left">
+                        <img src="~/Assets/FrontEnd/images/feature-bg/featured.jpg" alt="" class="feature-img" />
+                    </div>
+                </div>
+                <!-- left side -->
+                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                    <!-- Section Title -->
+                    <div class="section-title">
+                        <h2>Featured Products</h2>
+                        <p>Add featured products to weekly line up</p>
+                    </div>
+                    <!-- Section Title -->
+                    <!-- Feature slide 2 start -->
+                    <div class="feature-slider-2 owl-carousel owl-nav-style">
+                        <!-- single item -->
+                        @{ Html.RenderPartial("_ProductListFeatured"); }
+                        <!-- single item -->
+                    </div>
+                    <!-- Feature slide 2 End -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Feature Area end -->
+<!-- Recent Add Product Area Start -->
+<section class="recent-add-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Section Title -->
+                <div class="section-title">
+                    <h2>New Arrivals</h2>
+                    <p>Add new products to weekly line up</p>
+                </div>
+                <!-- Section Title -->
+            </div>
+        </div>
+        <!-- Recent Product slider Start -->
+        <div class="recent-product-slider owl-carousel owl-nav-style">
+            <!-- Single Item -->
+            @{ Html.RenderPartial("_ProductListNewArrivals"); }
+            <!-- Single Item -->
+        </div>
+        <!-- Recent product slider end -->
+    </div>
+</section>
+<!-- Recent product area end -->
+<!-- Banner Area 2 Start -->
+<div class="banner-area-2">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="banner-inner">
+                    <a href="#"><img src="~/Images/1920x816-2.jpg" alt="" /></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Banner Area 2 end -->
+<!-- Feature Area Start -->
+<section class="feature-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Section Title -->
+                <div class="section-title">
+                    <h2>Recently Added</h2>
+                    <p>Add products to weekly line up</p>
+                </div>
+                <!-- Section Title -->
+            </div>
+        </div>
+        <!-- Feature Slider Start -->
+        <div class="feature-slider owl-carousel owl-nav-style">
+            <!-- Single Item -->
+            @{ Html.RenderPartial("_ProductListRecentlyAdded"); }
+            <!-- Single Item -->
+        </div>
+        <!-- Feature Slider End -->
+    </div>
+</section>
+<!-- Feature Area End -->
+<!-- Testimonial Area Start -->
+<!-- Testimonial Area end -->
+<!-- Brand area start -->
+@*<div class="brand-area">
+        <div class="container">
+            <div class="brand-slider owl-carousel owl-nav-style owl-nav-style-2">
+                <div class="brand-slider-item">
+                    <a href="#"><img src="~/Assets/FrontEnd/images/brand-logo/1.jpg" alt="" /></a>
+                </div>
+                <div class="brand-slider-item">
+                    <a href="#"><img src="~/Assets/FrontEnd/images/brand-logo/2.jpg" alt="" /></a>
+                </div>
+                <div class="brand-slider-item">
+                    <a href="#"><img src="~/Assets/FrontEnd/images/brand-logo/3.jpg" alt="" /></a>
+                </div>
+                <div class="brand-slider-item">
+                    <a href="#"><img src="~/Assets/FrontEnd/images/brand-logo/4.jpg" alt="" /></a>
+                </div>
+                <div class="brand-slider-item">
+                    <a href="#"><img src="~/Assets/FrontEnd/images/brand-logo/5.jpg" alt="" /></a>
+                </div>
+                <div class="brand-slider-item">
+                    <a href="#"><img src="~/Assets/FrontEnd/images/brand-logo/1.jpg" alt="" /></a>
+                </div>
+                <div class="brand-slider-item">
+                    <a href="#"><img src="~/Assets/FrontEnd/images/brand-logo/2.jpg" alt="" /></a>
+                </div>
+            </div>
+        </div>
+    </div>*@
+<!-- Brand area end -->
+<!-- Modal Landing Page-->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-5 col-sm-12 col-xs-12">
+                        <div class="tab-content quickview-big-img">
+                            <div id="pro-1" class="tab-pane fade show active">
+                                <img src="~/Assets/FrontEnd/images/product-image/organic/product-11.jpg" alt="" />
+                            </div>
+                            <div id="pro-2" class="tab-pane fade">
+                                <img src="~/Assets/FrontEnd/images/product-image/organic/product-9.jpg" alt="" />
+                            </div>
+                            <div id="pro-3" class="tab-pane fade">
+                                <img src="~/Assets/FrontEnd/images/product-image/organic/product-20.jpg" alt="" />
+                            </div>
+                            <div id="pro-4" class="tab-pane fade">
+                                <img src="~/Assets/FrontEnd/images/product-image/organic/product-19.jpg" alt="" />
+                            </div>
+                        </div>
+                        <!-- Thumbnail Large Image End -->
+                        <!-- Thumbnail Image End -->
+                        <div class="quickview-wrap mt-15">
+                            <div class="quickview-slide-active owl-carousel nav owl-nav-style owl-nav-style-2" role="tablist">
+                                <a class="active" data-toggle="tab" href="#pro-1"><img src="~/Assets/FrontEnd/images/product-image/organic/product-11.jpg" alt="" /></a>
+                                <a data-toggle="tab" href="#pro-2"><img src="~/Assets/FrontEnd/images/product-image/organic/product-9.jpg" alt="" /></a>
+                                <a data-toggle="tab" href="#pro-3"><img src="~/Assets/FrontEnd/images/product-image/organic/product-20.jpg" alt="" /></a>
+                                <a data-toggle="tab" href="#pro-4"><img src="~/Assets/FrontEnd/images/product-image/organic/product-19.jpg" alt="" /></a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal end -->
+
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function () {
+        if ('@ViewBag.Result'!= "")
+        {
+            if ('@ViewBag.Result' == "1") {
+                alert("Your order placed Successfully, Order Id - "+ @ViewBag.orderId);
+            }
+            else {
+                alert("Issues while placing order, please try again");
+            }
+        }
+    });
+
+</script>

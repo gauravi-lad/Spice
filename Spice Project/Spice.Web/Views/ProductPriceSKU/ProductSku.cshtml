@@ -1,0 +1,373 @@
+﻿@model Spice.DataContarct.ViewModel.ProductPriceSKU_ViewModel
+
+@{
+    ViewBag.Title = "ProductPriceSKU_ViewModel";
+    Layout = "~/Views/Shared/_LayoutBackEnd.cshtml";
+}
+
+<script src="~/Scripts/ProductPriceSKU/Product_PriceSKU_Event.js"></script>
+
+<!-- Content Wrapper START -->
+<div class="main-content">
+    <div class="page-header">
+        <h2 class="header-title">Product SKU Master</h2>
+        <div class="header-sub-title">
+            <nav class="breadcrumb breadcrumb-dash">
+                <a href="#" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Admin</a>
+                <a class="breadcrumb-item" href="#">Product Price SKU</a>
+                <span class="breadcrumb-item active">Product SKU </span>
+            </nav>
+        </div>
+    </div>
+    <div class="card">
+        
+        <div class="card-body">
+            <div class="text-right m-b-20">
+                <button class="btn btn-primary" id="btnAddSKU">
+                    <i class="anticon anticon-plus-circle m-r-5"></i>
+                    <span>Add Sku</span>
+                </button>
+            </div>
+            <div id="dvMsg">
+                <div class="alert alert-success dvSuccess" style="display:none;">
+                    <div class="d-flex align-items-center justify-content-start">
+                        <span class="alert-icon">
+                            <i class="anticon anticon-check-o"></i>
+                        </span>
+                        <span>Record Added Successfully!!!</span>
+                    </div>
+                </div>
+                <div class="alert alert-success dvUpdate" style="display:none;">
+                    <div class="d-flex align-items-center justify-content-start">
+                        <span class="alert-icon">
+                            <i class="anticon anticon-check-o"></i>
+                        </span>
+                        <span>Record Updated Successfully!!!</span>
+                    </div>
+                </div>
+                <div class="alert alert-danger dvError" style="display:none;">
+                    <div class="d-flex justify-content-start">
+                        <span class="alert-icon m-r-20 font-size-30">
+                            <i class="anticon anticon-close-circle"></i>
+                        </span>
+                        <div>
+                            <h5 class="alert-heading">Error</h5>
+                            <p>Failed to Insert</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="m-t-25" id="dvInsert" style="display:none;">
+                <form id="frmSKU" method="post" enctype="multipart/form-data">
+                    <div class="form-row">
+                        <input type="hidden" id="hdnProductPriceSKUId" name="ProductPriceSKU.ProductPriceSKUId" />
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Product Name</label>
+                                <select class="form-control " name="ProductPriceSKU.ProductId" id="ddproduct" placeholder="Product Name">
+                                    <option value="" selected>Select Product</option>
+                                    @if (Model.lst_Product != null)
+                                    {
+                                        foreach (var item in Model.lst_Product)
+                                        {
+                                            if (item.ProductId == Model.ProductPriceSKU.ProductId)
+                                            {
+                                                <option value="@item.ProductId" selected>@item.ProductName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.ProductId" data-SKUCode="@item.ProductSKUCode" data-SKUId="@item.SkuId">@item.ProductName</option>
+                                            }
+
+                                        }
+                                    }
+                                </select>
+                                <span class="error"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>SKU Name</label>
+                                <input type="text" class="form-control " id="txtSkuName" name="ProductPriceSKU.SKU" placeholder="SKU Name" readonly>
+                                <span class="error"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Unit</label>
+                                <input type="text" class="form-control " id="txtunit" name="ProductPriceSKU.Unit" placeholder="Unit">
+                                <span class="error"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Rate Per Pc</label>
+                                <input type="text" class="form-control" id="txtRate" name="ProductPriceSKU.RatePerPc" placeholder="Rate Per Pc">
+                                <span class="error"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Min Order Quantity</label>
+                                <input type="text" class="form-control" id="txtminQ" onchange="ValidateQty()" name="ProductPriceSKU.MinOrderQuantity" placeholder="Min Quantity">
+                                <span class="error"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Max Order Quantity</label>
+                                <input type="text" class="form-control" id="txtMaxQ" onchange="ValidateQty()" name="ProductPriceSKU.MaxOrderQuantity" placeholder="Max Quantity">
+                                <span class="error"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <button id="btnAdd" type="button" class="btn btn-primary" onclick="AddSku()">Add</button>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="table-responsive">
+                        <table id="AddSkuList" class="table table-hover e-commerce-table">
+                            <thead>
+                                <tr id="tblHeading">
+                                    <th>Sr. No.</th>
+                                    <th>Product Name</th>
+                                    <th>SKU Name</th>
+                                    <th>Unit</th>
+                                    <th>Rate Per Pc</th>
+                                    <th>Min Quantity</th>
+                                    <th>Max Quantity</th>
+                                    <th>Action</th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="listsku"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-6">
+                            <button id="btnSubmit" type="button" class="btn btn-primary" style="display:none;">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="myGrid_Sku" style="height: 500px; width:100%;" class="ag-theme-alpine"></div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        if ('@ViewBag.Result'!= "")
+        {
+            if ('@ViewBag.Result' == "1") {
+                $('.dvSuccess').show();
+            }
+            else if('@ViewBag.Result' == "2")
+            {
+                $('.dvUpdate').show();
+            }
+            else {
+                $('.dvError').show();
+            }
+        }
+        $("#dvMsg").delay(2000).hide(0);
+
+    });
+
+    var trrow = 0;
+
+    function ValidateQty() {
+        
+        if ($("#txtMaxQ").val() >= $("#txtminQ").val()) {
+
+        }
+        else {
+            alert("Maximum Quantity must be greater than Minimum Quantity");
+            $("#txtMaxQ").val(0);
+
+        }
+    }
+
+
+    function AddSku() {
+        var ProductName = $("#ddproduct option:selected").text();
+        var ProductID = $("#ddproduct").val();
+        var SkuName = $("#txtSkuName").val();
+        var Unit = $("#txtunit").val();
+        var MinQ = $("#txtminQ").val();
+        var MaxQ = $("#txtMaxQ").val();
+        var RatePerPc = $("#txtRate").val();
+        if (ProductName != "" && SkuName != "" && Unit!="" && parseInt(MinQ) >= 0 && parseInt(MaxQ) >= 0 && parseInt(RatePerPc) >= 0) 
+        {
+        var tr = "<tr id='tr" + trrow + "'>";
+
+        tr += "<td>";
+        tr += "<span id='trID" + trrow + "'>" + (trrow + 1) + "</span>";
+        tr += "</td>";
+
+        tr += "<td>";
+        tr += "<span id='trItemName" + trrow + "'>" + ProductName + "</span>";
+        tr += "<input type='hidden' id='hdnProductName" + trrow + "' name=lst_ProductPriceSKU[" + trrow + "].ProductName' value='" + ProductName + "'>";
+        tr += "<input type='hidden' id='hdnProductID" + trrow + "' name='lst_ProductPriceSKU[" + trrow + "].ProductId' value='" + ProductID + "'>";
+        tr += "</td>";
+
+        tr += "<td>";
+        tr += "<span id='trSkuName" + trrow + "'>" + SkuName + "</span>";
+        tr += "<input type='hidden' id='hdnSkuName" + trrow + "' name='lst_ProductPriceSKU[" + trrow + "].SKU' value='" + SkuName + "'>";
+        tr += "</td>";
+
+        tr += "<td>";
+        tr += "<span id='trUnit" + trrow + "'>" + Unit + "</span>";
+        tr += "<input type='hidden' id='hdnUnit" + trrow + "' name='lst_ProductPriceSKU[" + trrow + "].Unit' value='" + Unit + "'>";
+        tr += "</td>";
+
+        tr += "<td>";
+        tr += "<span id='trRatePerPc" + trrow + "'>" + RatePerPc + "</span>";
+        tr += "<input type='hidden' id='hdnRatePerPc" + trrow + "' name='lst_ProductPriceSKU[" + trrow + "].RatePerPc' value='" + RatePerPc + "'>";
+        tr += "</td>";
+
+        tr += "<td>";
+        tr += "<span id='trMinQ" + trrow + "'>" + MinQ + "</span>";
+        tr += "<input type='hidden' id='hdnMinQ" + trrow + "' name='lst_ProductPriceSKU[" + trrow + "].MinOrderQuantity' value='" + MinQ + "'>";
+        tr += "</td>";
+
+        tr += "<td>";
+        tr += "<span id='trMaxQ" + trrow + "'>" + MaxQ + "</span>";
+        tr += "<input type='hidden' id='hdnMaxQ" + trrow + "' name='lst_ProductPriceSKU[" + trrow + "].MaxOrderQuantity' value='" + MaxQ + "'>";
+        tr += "</td>";
+
+        tr += "<td class='edit'>";
+
+        //tr += "<button type='button' id='edit-Test-details' class='btn btn-icon btn-hover btn-sm btn-rounded pull-right' onclick='javascript:EditTestDetailsData(" + trrow + ")'><i class='anticon anticon-edit' ></i></button>";
+
+        tr += "<button type='button' id='delete-sku-details' class='btn btn-box-tool btn-tel-delete' onclick='javascript:DeleteTestDetailsData(" + trrow + ")'><i class='fa fa-times' ></i></button>";
+
+        tr += "</td>";
+        tr += "</tr>";
+
+        trrow += 1;
+
+            $("#AddSkuList").append(tr);
+            ClearFields();
+    }
+        if ($('#AddSkuList tr').length > 1) {
+            $("#btnSubmit").show();
+        }
+        
+    }
+    function ClearFields() {
+        $("#ddproduct").val(0);
+        $("#ddproduct").val('');
+        $("#txtSkuName").val('');
+        $("#txtunit").val('');
+        $("#txtminQ").val('');
+        $("#txtMaxQ").val('');
+        $("#txtRate").val('');
+    }
+
+    function DeleteTestDetailsData(RowId) {
+      
+        $("#AddSkuList").find("[id='tr" + RowId + "']").remove();
+        ReArrangeTestDetailsData();
+        trrow = trrow-1;
+    }
+
+    function EditTestDetailsData(rowID) {
+        var strProductId = $("#hdnProductID" + rowID).val();
+        $("#ddproduct").val(strProductId);
+
+        var strSKUName = $("#hdnSkuName" + rowID).val();    
+        $("#txtSkuName").val(strSKUName);
+
+        var strUnitName = $("#hdnUnit" + rowID).val();
+        $("#txtunit").val(strUnitName);
+
+        var strRateName = $("#hdnRatePerPc" + rowID).val();
+        $("#txtRate").val(strRateName);
+
+        var strMinQ= $("#hdnMinQ" + rowID).val();
+        $("#txtminQ").val(strMinQ);
+
+        var strMaxQ = $("#hdnMaxQ" + rowID).val();
+        $("#txtMaxQ").val(strMaxQ);
+        DeleteTestDetailsData(rowID);    
+        trrow = trrow - 1;
+    }
+
+    function ReArrangeTestDetailsData() {
+        $("#AddSkuList").find("tr").each(function (i, row) {
+           
+            if ($(row)[0].id != 'tblHeading') {
+
+                $(row)[0].id = 'tr' + (i - 1);
+
+                var newTR = "#" + $(row)[0].id + " td";
+
+
+                if ($(newTR).find("[id^='hdnProductName']").length > 0) {
+                    $(newTR).find("[id^='hdnProductName']")[0].id = "hdnProductName" + (i - 1);
+                    $(newTR).find("[id^='hdnProductID']")[0].id = "hdnProductID" + (i - 1);
+                    $(newTR).find("[id^='trItemName']")[0].id = "trItemName" + (i - 1);
+                    $(newTR).find("[id^='hdnProductName']").attr("name", "lst_ProductPriceSKU[" + (i - 1) + "].ProductName");
+                    $(newTR).find("[id^='hdnProductID']").attr("name", "lst_ProductPriceSKU[" + (i - 1) + "].ProductId");
+                }
+
+                if ($(newTR).find("[id^='hdnSkuName']").length > 0) {
+                    $(newTR).find("[id^='hdnSkuName']")[0].id = "hdnSkuName" + (i - 1);
+                    $(newTR).find("[id^='trSkuName']")[0].id = "trSkuName" + (i - 1);
+                    $(newTR).find("[id^='hdnSkuName']").attr("name", "lst_ProductPriceSKU[" + (i - 1) + "].SKU");
+                }
+                if ($(newTR).find("[id^='hdnUnit']").length > 0) {
+                    $(newTR).find("[id^='hdnUnit']")[0].id = "hdnUnit" + (i - 1);
+                    $(newTR).find("[id^='trUnit']")[0].id = "trUnit" + (i - 1);
+                    $(newTR).find("[id^='hdnUnit']").attr("name", "lst_ProductPriceSKU[" + (i - 1) + "].Unit");
+                }
+                if ($(newTR).find("[id^='hdnRatePerPc']").length > 0) {
+                    $(newTR).find("[id^='hdnRatePerPc']")[0].id = "hdnRatePerPc" + (i - 1);
+                    $(newTR).find("[id^='trRatePerPc']")[0].id = "trRatePerPc" + (i - 1);
+                    $(newTR).find("[id^='hdnRatePerPc']").attr("name", "lst_ProductPriceSKU[" + (i - 1) + "].RatePerPc");
+                }
+                if ($(newTR).find("[id^='hdnMinQ']").length > 0) {
+                    $(newTR).find("[id^='hdnMinQ']")[0].id = "hdnMinQ" + (i - 1);
+                    $(newTR).find("[id^='trMinQ']")[0].id = "trMinQ" + (i - 1);
+                    $(newTR).find("[id^='hdnMinQ']").attr("name", "lst_ProductPriceSKU[" + (i - 1) + "].MinOrderQuantity");
+                }
+                if ($(newTR).find("[id^='hdnMaxQ']").length > 0) {
+                    $(newTR).find("[id^='hdnMaxQ']")[0].id = "hdnMaxQ" + (i - 1);
+                    $(newTR).find("[id^='trMaxQ']")[0].id = "trMaxQ" + (i - 1);
+                    $(newTR).find("[id^='hdnMaxQ']").attr("name", "lst_ProductPriceSKU[" + (i - 1) + "].MaxOrderQuantity");
+                }
+
+
+                if ($(newTR).find("[id='delete-sku-details']").length > 0) {
+                    $(newTR).find("[id='delete-sku-details']").attr("onclick", "DeleteTestDetailsData(" + (i - 1) + "," + $(newTR).find("[id^='hdnProductID']").val() + ")");
+                }
+            }
+        });
+    }
+    $("#ddproduct").change(function () {
+        var listlength = $('#listsku tr').length;
+        $("#txtSkuName").val('');
+        var skuCode = $('option:selected', this).attr('data-SKUCode');  
+        var skuCodeInt = parseInt($('option:selected', this).attr('data-SKUId'));  
+        var oldSku = skuCodeInt;
+        skuCodeInt = skuCodeInt + listlength;
+        $("#txtSkuName").val(skuCode.replace(oldSku,skuCodeInt));
+    });
+
+</script>

@@ -1,0 +1,72 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30320.27
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spice.Web", "Spice.Web\Spice.Web.csproj", "{3A3AEFDE-C914-4790-9D9A-B5FF8108EC4F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{90B84523-B52D-4991-9290-DC31A13BC23E} = {90B84523-B52D-4991-9290-DC31A13BC23E}
+		{9417FA6A-F260-45CA-AF60-AE4B390EF2A0} = {9417FA6A-F260-45CA-AF60-AE4B390EF2A0}
+		{C6255A89-4FFF-4662-A84A-B0F81DC2ADB7} = {C6255A89-4FFF-4662-A84A-B0F81DC2ADB7}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spice.BAL", "Spice.BAL\Spice.BAL.csproj", "{90B84523-B52D-4991-9290-DC31A13BC23E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9417FA6A-F260-45CA-AF60-AE4B390EF2A0} = {9417FA6A-F260-45CA-AF60-AE4B390EF2A0}
+		{C6255A89-4FFF-4662-A84A-B0F81DC2ADB7} = {C6255A89-4FFF-4662-A84A-B0F81DC2ADB7}
+		{C79C3BEB-007C-46E6-8A34-6624EB50EE01} = {C79C3BEB-007C-46E6-8A34-6624EB50EE01}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spice.CommanUtilities", "Spice.CommanUtilities\Spice.CommanUtilities.csproj", "{C6255A89-4FFF-4662-A84A-B0F81DC2ADB7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spice.DAL", "Spice.DAL\Spice.DAL.csproj", "{C79C3BEB-007C-46E6-8A34-6624EB50EE01}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9417FA6A-F260-45CA-AF60-AE4B390EF2A0} = {9417FA6A-F260-45CA-AF60-AE4B390EF2A0}
+		{C6255A89-4FFF-4662-A84A-B0F81DC2ADB7} = {C6255A89-4FFF-4662-A84A-B0F81DC2ADB7}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spice.DataContarct", "Spice.DataContarct\Spice.DataContarct.csproj", "{9417FA6A-F260-45CA-AF60-AE4B390EF2A0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C6255A89-4FFF-4662-A84A-B0F81DC2ADB7} = {C6255A89-4FFF-4662-A84A-B0F81DC2ADB7}
+	EndProjectSection
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Spice.Database", "Spice.Database\Spice.Database.sqlproj", "{C2CD39BC-BCD8-46A8-8D7C-AADE2EA2CC3A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3A3AEFDE-C914-4790-9D9A-B5FF8108EC4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A3AEFDE-C914-4790-9D9A-B5FF8108EC4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A3AEFDE-C914-4790-9D9A-B5FF8108EC4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A3AEFDE-C914-4790-9D9A-B5FF8108EC4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90B84523-B52D-4991-9290-DC31A13BC23E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90B84523-B52D-4991-9290-DC31A13BC23E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90B84523-B52D-4991-9290-DC31A13BC23E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90B84523-B52D-4991-9290-DC31A13BC23E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6255A89-4FFF-4662-A84A-B0F81DC2ADB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6255A89-4FFF-4662-A84A-B0F81DC2ADB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6255A89-4FFF-4662-A84A-B0F81DC2ADB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6255A89-4FFF-4662-A84A-B0F81DC2ADB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C79C3BEB-007C-46E6-8A34-6624EB50EE01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C79C3BEB-007C-46E6-8A34-6624EB50EE01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C79C3BEB-007C-46E6-8A34-6624EB50EE01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C79C3BEB-007C-46E6-8A34-6624EB50EE01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9417FA6A-F260-45CA-AF60-AE4B390EF2A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9417FA6A-F260-45CA-AF60-AE4B390EF2A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9417FA6A-F260-45CA-AF60-AE4B390EF2A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9417FA6A-F260-45CA-AF60-AE4B390EF2A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2CD39BC-BCD8-46A8-8D7C-AADE2EA2CC3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2CD39BC-BCD8-46A8-8D7C-AADE2EA2CC3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2CD39BC-BCD8-46A8-8D7C-AADE2EA2CC3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2CD39BC-BCD8-46A8-8D7C-AADE2EA2CC3A}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {28F9FB8B-6BF7-45F3-8E82-D7CB0B975EE0}
+	EndGlobalSection
+EndGlobal
