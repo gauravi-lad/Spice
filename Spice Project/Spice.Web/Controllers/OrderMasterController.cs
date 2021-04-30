@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Spice.BAL;
+using Spice.DataContarct.DataModel;
 using Spice.DataContarct.ViewModel;
 using System;
 using System.Linq;
@@ -13,9 +14,11 @@ namespace Spice.Web.Controllers
         public OrderMasterController()
         {
             obj_OrderMaster_BAL = new OrderMaster_BAL();
+            obj_Payment = new Payment_BAL();
         }
 
         OrderMaster_BAL obj_OrderMaster_BAL;
+        Payment_BAL obj_Payment;
 
         public ActionResult checkout()
         {
@@ -27,6 +30,13 @@ namespace Spice.Web.Controllers
         {
             try
             {
+                Payment_DataModel paymentMasterVM = new Payment_DataModel();
+                if (orderMasterVM.order_Item_Details.Count == 0 && TempData["orderMasterVM"] != null)
+                {
+                    orderMasterVM = (OrderMaster_ViewModel)TempData["orderMasterVM"];
+                    paymentMasterVM = orderMasterVM.paymentMaster;
+                }
+
                 string result = string.Empty;
                 Cart_ViewModel obj_Cart = new Cart_ViewModel();
                 orderMasterVM.orderMaster.Customer_Id = Convert.ToInt32(Session["FrontEnd_UserId"]);
@@ -49,7 +59,12 @@ namespace Spice.Web.Controllers
                 {
                     TempData["Result"] = "1";
                     TempData["OrderID"] = orderMasterVM.orderMaster.Order_Invoice_Number;
-                    
+
+                    if (paymentMasterVM.Payment_Method == 2)
+                    {
+                        paymentMasterVM.Order_ID = orderMasterVM.orderMaster.Id;
+                        obj_Payment.Insert_Payment(paymentMasterVM);
+                    }
                 }
                 else
                 {

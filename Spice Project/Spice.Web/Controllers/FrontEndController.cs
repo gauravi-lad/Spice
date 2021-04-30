@@ -8,6 +8,7 @@ using System.Web;
 using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Web.Security;
+using PayPal.Api;
 
 
 
@@ -15,6 +16,8 @@ namespace Spice.Web.Controllers
 {
     public class FrontEndController : Controller
     {
+        private int InvoiceNumber = 0;
+
         readonly FrontEndBAL FrontEndBAL;
         readonly Cart_BAL Cart;
         readonly CustomerFavourites_BAL obj_customerfavourites;
@@ -22,6 +25,8 @@ namespace Spice.Web.Controllers
         readonly CustomerAddressMaster_BAL CustomerAddressMaster_BAL;
         readonly CategoryMasterBAL categoryMasterBAL;
         readonly SubCategory_BAL subCategory_BAL;
+        OrderMaster_BAL obj_OrderMaster_BAL;
+
         public FrontEndController()
         {
             FrontEndBAL = new FrontEndBAL();
@@ -31,6 +36,7 @@ namespace Spice.Web.Controllers
             CustomerAddressMaster_BAL = new CustomerAddressMaster_BAL();
             categoryMasterBAL = new CategoryMasterBAL();
             subCategory_BAL = new SubCategory_BAL();
+            obj_OrderMaster_BAL = new OrderMaster_BAL();
         }
         public ActionResult Index(FrontEndViewModel frontEndViewModel)
         {
@@ -62,6 +68,14 @@ namespace Spice.Web.Controllers
                     }
                 }
 
+                if (TempData["PaymentFailed"] != null)
+                {
+                    ViewBag.PaymentFailed = 1;
+                }
+                if (TempData["PaymentSucessfull"] != null)
+                {
+                    ViewBag.PaymentSucessfull = 1;
+                }
             }
             catch (Exception ex)
             {
@@ -153,6 +167,9 @@ namespace Spice.Web.Controllers
             orderMasterVM.orderMaster.Payment_Mode = 2;
             orderMasterVM.orderMaster.Payment_Status = 1;
             orderMasterVM.orderMaster.Customer_Id = CustomerID;
+
+            TempData["orderMasterVM"] = orderMasterVM;
+
 
             return View("Checkout", orderMasterVM);
         }
@@ -275,5 +292,143 @@ namespace Spice.Web.Controllers
            
             return View("Blog");
         }
+
+        public ActionResult PaymentWithPaypal(string Cancel = null)
+        {
+            OrderMaster_ViewModel orderMasterVM = new OrderMaster_ViewModel();
+            if (TempData["orderMasterVM"] != null)
+            {
+                orderMasterVM = (OrderMaster_ViewModel)TempData["orderMasterVM"];
+            }
+
+            try
+            {
+                APIContext apiContext = PaypalConfiguration.GetAPIContext();
+
+                string payerId = Request.Params["PayerID"];
+
+                if (string.IsNullOrEmpty(payerId))
+                {
+                    var orderMaster = obj_OrderMaster_BAL.Get_Latest_Id_Order();
+                    InvoiceNumber = orderMaster != null ? orderMaster[0].Id : 0;
+
+                    string baseURI = Request.Url.Scheme + "://" + Request.Url.Authority + "/FrontEnd/PaymentWithPayPal?";
+                    var guid = Convert.ToString((new Random()).Next(100000));
+                    var createdPayment = CreatePayment(apiContext, baseURI + "guid=" + guid, orderMasterVM);
+
+                    var links = createdPayment.links.GetEnumerator();
+                    string paypalRedirectUrl = null;
+                    while (links.MoveNext())
+                    {
+                        Links lnk = links.Current;
+
+                        if (lnk.rel.ToLower().Trim().Equals("approval_url"))
+                        {
+                            paypalRedirectUrl = lnk.href;
+                        }
+                    }
+
+                    Session.Add(guid, createdPayment.id);
+
+                    return Redirect(paypalRedirectUrl);
+                }
+                else
+                {
+                    var guid = Request.Params["guid"];
+                    orderMasterVM.paymentMaster.Payment_Method = 2;
+                    orderMasterVM.paymentMaster.PayPal_Payment_ID= Session[guid] as string;
+                    orderMasterVM.paymentMaster.Customer_ID = Convert.ToInt32(Session["FrontEnd_UserId"]);
+                    var executedPayment = this.ExecutePayment(apiContext, payerId, Session[guid] as string);
+
+                    if (executedPayment.state.ToLower() != "approved")
+                    {
+                        TempData["PaymentFailed"] = "1";
+                        return RedirectToAction("Index", "FrontEnd");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.log(ex.Message, Convert.ToString(LogDirectory.Spice_Exception_Log));
+                TempData["PaymentFailed"] = "1";
+                return RedirectToAction("Index", "FrontEnd");
+            }
+
+            TempData["PaymentSucessfull"] = "1";
+
+            return RedirectToAction("Insert", "OrderMaster");
+        }
+
+        private PayPal.Api.Payment payment;
+        private Payment ExecutePayment(APIContext apiContext, string payerId, string paymentId)
+        {
+            var paymentExecution = new PaymentExecution() { payer_id = payerId };
+            this.payment = new Payment() { id = paymentId };
+            return this.payment.Execute(apiContext, paymentExecution);
+        }
+
+        private Payment CreatePayment(APIContext apiContext, string redirectUrl, OrderMaster_ViewModel orderMasterVM)
+        {
+            var totalTaxAmount = 0;
+            var totalFinalAmount = 0;
+
+            var itemList = new ItemList() { items = new List<Item>() };
+            foreach (var orderDetails in orderMasterVM.order_Item_Details)
+            {
+                itemList.items.Add(new Item()
+                {
+                    name = orderDetails.ProductName,
+                    currency = "USD",
+                    price = orderDetails.RatePerPc != 0 ? orderDetails.RatePerPc.ToString() : orderDetails.UnitPrice.ToString(),
+                    quantity = orderDetails.Quantity.ToString(),
+                    sku = "sku" //sku = orderDetails.SKU
+                }) ;
+                totalTaxAmount += orderDetails.TaxAmmount;
+                totalFinalAmount += orderDetails.FinalAmmount;
+            }            
+            
+            var payer = new Payer() { payment_method = "paypal" };
+            
+            var redirUrls = new RedirectUrls()
+            {
+                cancel_url = redirectUrl + "&Cancel=true",
+                return_url = redirectUrl
+            };
+
+            var details = new Details()
+            {
+                tax = totalTaxAmount.ToString(),
+                shipping = orderMasterVM.orderMaster.Shipping_Charges.ToString(),
+                subtotal = totalFinalAmount.ToString()
+            };
+
+            var amount = new Amount()
+            {
+                currency = "USD",
+                total = (totalTaxAmount + orderMasterVM.orderMaster.Shipping_Charges + totalFinalAmount).ToString(), // Total must be equal to sum of tax, shipping and subtotal.
+                details = details
+            };
+
+            var transactionList = new List<Transaction>();
+            transactionList.Add(new Transaction()
+            {
+                description = "PayPal Transaction",
+                invoice_number = InvoiceNumber.ToString(), //Generate an Invoice No
+                amount = amount,
+                item_list = itemList
+            });
+
+
+            this.payment = new Payment()
+            {
+                intent = "sale",
+                payer = payer,
+                transactions = transactionList,
+                redirect_urls = redirUrls
+            };
+
+            return this.payment.Create(apiContext);
+        }
+
     }
 }

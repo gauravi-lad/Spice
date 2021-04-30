@@ -1,6 +1,6 @@
 ﻿//Changes by Aditya [Commented for now] 
 
-function SetAddress(elem) {
+function SetAddress(elem) {  
     var shippingAddressID = $('input:radio[name="shippingAddressRadios"]:checked').attr("data-shipping");
     var billingAddressID = $('input:radio[name="billingAddressRadios"]:checked').attr("data-billing");
 
@@ -288,5 +288,15 @@ function SetIsShipping(isShipping) {
     $("#hdnIsShipping").val(isShipping);
 }
 
-
+function PaymentMethod(elem) {
+    var paymentMethod = $('input:radio[name="RadioPayment"]:checked').attr("data-payment");
+    
+    if (paymentMethod == '1') {
+        $("#frmPlaceOrder").attr("action", "/FrontEnd/PaymentWithPaypal");
+        $("#frmPlaceOrder").submit();
+    }
+    else {
+        SetAddress(elem)
+    } 
+}
 

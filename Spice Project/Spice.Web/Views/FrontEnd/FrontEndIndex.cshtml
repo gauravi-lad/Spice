@@ -1,9 +1,15 @@
-﻿@{
-    Layout = "~/Views/Shared/_LayoutFrontEnd.cshtml";
+﻿@{ 
+    Layout = "~/Views/Shared/_LayoutFrontEnd.cshtml"; 
 }
+
 
 <script src="~/Scripts/FrontEnd/FrontEnd_Event.js"></script>
 <script src="~/Scripts/FrontEnd/FrontEnd_Method.js"></script>
+
+<input type="hidden" id="hdnPaymentFailed" value="@ViewBag.PaymentFailed" />
+<input type="hidden" id="hdnPaymentSuccessfull" value="@ViewBag.PaymentSucessfull" />
+<input type="hidden" id="hdnOrderResult" value="@ViewBag.Result" />
+
 <!-- Slider Arae Start -->
 <div class="slider-area home-2 home-4">
     <div class="slider-active-3 owl-carousel slider-hm8 owl-dot-style">
@@ -135,7 +141,7 @@
             <!-- Single Item -->
             @{
                 Html.RenderPartial("_ProductListBestSeller");
-            }
+             }
             <!-- Single Item -->
         </div>
         <!-- Best Sell Slider Carousel End -->
@@ -164,9 +170,9 @@
                     <!-- Feature slide 2 start -->
                     <div class="feature-slider-2 owl-carousel owl-nav-style">
                         <!-- single item -->
-                        @{
-                            Html.RenderPartial("_ProductListFeatured");
-                        }
+                        @{ 
+                            Html.RenderPartial("_ProductListFeatured"); 
+                         }
                         <!-- single item -->
                     </div>
                     <!-- Feature slide 2 End -->
@@ -193,8 +199,8 @@
         <div class="recent-product-slider owl-carousel owl-nav-style">
             <!-- Single Item -->
             @{
-                Html.RenderPartial("_ProductListNewArrivals");
-            }
+                Html.RenderPartial("_ProductListNewArrivals"); 
+             }
             <!-- Single Item -->
         </div>
         <!-- Recent product slider end -->
@@ -230,8 +236,8 @@
         <!-- Feature Slider Start -->
         <div class="feature-slider owl-carousel owl-nav-style">
             <!-- Single Item -->
-            @{
-                Html.RenderPartial("_ProductListRecentlyAdded");
+            @{ 
+                Html.RenderPartial("_ProductListRecentlyAdded"); 
             }
             <!-- Single Item -->
         </div>
@@ -306,7 +312,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
@@ -315,7 +321,7 @@
 <!-- Modal end -->
 
 <script type="text/javascript" charset="utf-8">
-     $(document).ready(function () {
+    $(document).ready(function () {
 
         if ('@ViewBag.Result'!= "")
         {

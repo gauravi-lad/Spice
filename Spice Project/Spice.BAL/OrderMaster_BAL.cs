@@ -126,5 +126,13 @@ namespace Spice.BAL
             return result;
         }
 
+        public List<OrderMaster> Get_Latest_Id_Order()
+        {
+            List<OrderMaster> obj_orderMasterVM = new List<OrderMaster>();
+
+            List<KeyValuePair<string, string>> listing_Parameters = new List<KeyValuePair<string, string>>();
+
+            return obj_orderMasterVM = JsonConvert.DeserializeObject<List<OrderMaster>>(obj_OrderMaster_DAL.Get_Latest_Id_Order(listing_Parameters));            
+        }
     }
 }

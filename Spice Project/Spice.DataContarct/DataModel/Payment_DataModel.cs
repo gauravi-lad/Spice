@@ -14,5 +14,12 @@ namespace Spice.DataContarct.DataModel
         public string Order_Amount { get; set; }
         public int Cuurency { get; set; }
 
+        public int Id { get; set; }
+        public int Order_ID { get; set; }
+        public int Customer_ID { get; set; }
+        public string PayPal_Payment_ID { get; set; }
+        public int Payment_Method { get; set; } = 1;
+        
+
     }
 }

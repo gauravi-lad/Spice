@@ -21,7 +21,16 @@
     //    }
     //});
 
-   
+
+    if ($("#hdnPaymentFailed").val() != null && $("#hdnPaymentFailed").val() == 1) {
+        toastr.error("Payment failed. Issues while placing order, please try again.");
+    }
+    else if ($("#hdnPaymentSuccessfull").val() != null && $("#hdnPaymentSuccessfull").val() == 1) {
+        toastr.success("Payment successfull. Order placed successfully.");
+    }
+    else if ($("#hdnOrderResult").val() != null && $("#hdnOrderResult").val() == 1) {
+        toastr.success("Order placed successfully.");
+    }
 
     $("input:radio:first").prop("checked", true).trigger("click");
 

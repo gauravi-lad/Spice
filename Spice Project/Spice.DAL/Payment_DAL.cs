@@ -11,7 +11,7 @@ namespace Spice.DAL
     {
         public string Insert_Payment(List<KeyValuePair<string, string>> parameters)
         {
-            return GeneralFunctionalities.Process_Insert_Data_Single_Table("Sp_ins_upd_Blog", parameters);
+            return GeneralFunctionalities.Process_Insert_Data_Single_Table("Sp_ins_upd_PaymentMaster", parameters);
         }
     }
 }

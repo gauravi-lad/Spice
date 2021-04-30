@@ -49,5 +49,9 @@ namespace Spice.DAL
             return GeneralFunctionalities.Process_Insert_Json_Data("sp_ins_Update_Invoice_status", json_parameter);
         }
 
+        public string Get_Latest_Id_Order(List<KeyValuePair<string, string>> parameters)
+        {
+            return GeneralFunctionalities.Process_Listing_Data_Single_Table("sp_get_Latest_Id_Order", parameters);
+        }
     }
 }

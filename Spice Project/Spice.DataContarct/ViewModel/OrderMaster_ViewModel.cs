@@ -22,9 +22,12 @@ namespace Spice.DataContarct.ViewModel
             order_Invoice_Details = new List<Order_Invoice_Details>();
             customer_Address = new CustomerAddressMaster_DataModel();
             CustomerAddressList = new List<CustomerAddressMaster_DataModel>();
+            paymentMaster = new Payment_DataModel();
         }
 
         public OrderMaster orderMaster { get; set; }
+
+        public Payment_DataModel paymentMaster { get; set; }
 
         public List<OrderMaster> lst_orderMaster { get; set; }
 
@@ -90,6 +93,6 @@ namespace Spice.DataContarct.ViewModel
                 return result;
 
             }
-        }
+        }         
     }
 }

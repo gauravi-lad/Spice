@@ -22,11 +22,11 @@ namespace Spice.BAL
         {
             string result = "";
             List<KeyValuePair<string, string>> insert_Parameters = new List<KeyValuePair<string, string>>();
-            insert_Parameters.Add(new KeyValuePair<string, string>("@Customer_Name", Convert.ToString(Payment_Model.Customer_Name)));
-            insert_Parameters.Add(new KeyValuePair<string, string>("@Mobile_No", Convert.ToString(Payment_Model.Mobile_No)));
-            insert_Parameters.Add(new KeyValuePair<string, string>("@Email_ID", Convert.ToString(Payment_Model.Email_ID)));
-            insert_Parameters.Add(new KeyValuePair<string, string>("@Cuurency", Convert.ToString(Payment_Model.Cuurency)));
-            insert_Parameters.Add(new KeyValuePair<string, string>("@Order_Amount", Convert.ToString(Payment_Model.Order_Amount)));
+            insert_Parameters.Add(new KeyValuePair<string, string>("@Id", Convert.ToString(Payment_Model.Id)));
+            insert_Parameters.Add(new KeyValuePair<string, string>("@Order_ID", Convert.ToString(Payment_Model.Order_ID)));
+            insert_Parameters.Add(new KeyValuePair<string, string>("@Customer_ID", Convert.ToString(Payment_Model.Customer_ID)));
+            insert_Parameters.Add(new KeyValuePair<string, string>("@PayPal_Payment_ID", Convert.ToString(Payment_Model.PayPal_Payment_ID)));
+            insert_Parameters.Add(new KeyValuePair<string, string>("@Payment_Method", Convert.ToString(Payment_Model.Payment_Method)));
             result = obj_Payment_DAL.Insert_Payment(insert_Parameters);
             return result;
         }

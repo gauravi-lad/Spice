@@ -1,8 +1,8 @@
 ﻿@model Spice.DataContarct.ViewModel.OrderMaster_ViewModel
 @{
+    
 
-
-    Layout = "~/Views/Shared/_LayoutFrontEnd.cshtml";
+    Layout = "~/Views/Shared/_LayoutFrontEnd.cshtml"; 
 }
 
 <script src="~/Scripts/FrontEnd/FrontEnd_Event.js"></script>
@@ -27,7 +27,7 @@
 </section>
 <!-- Breadcrumb Area End -->
 <!-- checkout area start -->
-<form action="/OrderMaster/Insert" method="post">
+<form id="frmPlaceOrder" action="/OrderMaster/Insert" method="post">
 
     <input type="hidden" value="@Model.orderMaster.Customer_Id" name="orderMaster.Customer_Id" />
     <input type="hidden" name="orderMaster.Id" value="@Model.orderMaster.Id" />
@@ -63,7 +63,7 @@
                         </h3>
 
                         <div class="row address-add-row">
-                            @{
+                           @{
                                 if (Model.CustomerAddressList != null && Model.CustomerAddressList.Count > 0)
                                 {
                                     int i = 1;
@@ -114,7 +114,7 @@
                         </h3>
 
                         <div class="row address-add-row">
-                            @{
+                           @{
                                 if (Model.CustomerAddressList != null && Model.CustomerAddressList.Count > 0)
                                 {
                                     int j = 1;
@@ -166,7 +166,7 @@
                                 </div>
                                 <div class="your-order-middle">
                                     <ul>
-                                        @if (Model.order_Item_Details != null && Model.order_Item_Details.Count > 0)
+                                       @if (Model.order_Item_Details != null && Model.order_Item_Details.Count > 0)
                                         {
                                             var count = 0;
                                             foreach (var item in Model.order_Item_Details)
@@ -254,9 +254,51 @@
                             </div>
                         </div>
                         <div class="Place-order mt-25">
-                            <a class="btn-hover" onclick="SetAddress(this);" href="#">Place Order</a>
+                            <a class="btn-hover" data-toggle="modal" data-target="#PaymentModal" href="#">Place Order</a>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="PaymentModal" tabindex="-1" aria-labelledby="PaymentModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Select Payment Method</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="your-order-area">
+                        <div class="your-order-wrap gray-bg-4">
+                            <div class="payment-method">
+                                <div class="payment-accordion element-mrg">
+                                    <div class="panel-group" id="accordion">
+                                        <div class="panel payment-accordion">
+                                            <div class="panel-heading" id="method-two">
+                                                <h4 class="panel-title">
+                                                    <input class="form-check-input rdoBilling" type="radio" data-payment="1" name="RadioPayment" id="PayPal" value="" checked>
+                                                    <label class="form-check-label" for="PayPal">Pay with PayPal</label>
+                                                </h4>
+                                            </div>
+                                        </div>
+                                        <div class="panel payment-accordion">
+                                            <div class="panel-heading" id="method-three">
+                                                <h4 class="panel-title">
+                                                    <input class="form-check-input rdoBilling" type="radio" data-payment="2" name="RadioPayment" id="COD" value="">
+                                                    <label class="form-check-label" for="COD">Cash on delivery</label>
+                                                </h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="PaymentMethod(this)" class="btn btn-primary">Confirm</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
